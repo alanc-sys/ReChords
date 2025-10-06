@@ -1,0 +1,14 @@
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/Application.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/config/ApplicationConfig.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/config/SecurityConfig.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/config/security/JwtAuthenticationFilter.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/controller/PrivateController.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/controller/auth/AuthController.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/dto/request/LoginRequest.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/dto/request/RegisterRequest.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/dto/response/AuthResponse.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/entities/Role.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/entities/User.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/repositories/UserRepository.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/services/auth/AuthService.java
+/Users/macbook/Documents/Analisis-Musical/application/src/main/java/com/misacordes/application/services/auth/JwtService.java
