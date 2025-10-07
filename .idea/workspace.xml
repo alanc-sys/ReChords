@@ -4,66 +4,82 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2863bea-961c-417d-8b6b-2e8a9bf47747" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/Application.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/Jwt/JwtAuthenticationFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/ApplicationConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/SecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/AuthController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/AuthResponse$AuthResponseBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/AuthResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/LoginRequest$LoginRequestBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/LoginRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/PrivateController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/RegisterRequest$RegisterRequestBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/RegisterRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User$UserBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/AuthService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/JwtService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/ApplicationTests.class" beforeDir="false" />
+    <list default="true" id="f2863bea-961c-417d-8b6b-2e8a9bf47747" name="Changes" comment="Refactorizacion">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/songController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/SongRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/response/SongResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/entities/Song.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/SongRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/auth/SongService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/ApplicationConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/ApplicationConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/JwtAuthenticationFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/JwtAuthenticationFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/PrivateController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/PrivateController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/auth/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/auth/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest$LoginRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest$LoginRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest$RegisterRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest$RegisterRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse$AuthResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse$AuthResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User$UserBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User$UserBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/AuthService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/JwtService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/ApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/ApplicationTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "alanc-sys"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;alanc-sys&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/alanc-sys/ReChords.git",
-    "accountId": "c84d1427-f69f-4c1d-9963-bdc58baf68fd"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/alanc-sys/ReChords.git&quot;,
+    &quot;accountId&quot;: &quot;c84d1427-f69f-4c1d-9963-bdc58baf68fd&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="33fdLX4DeB2WXWmfD3nwV2lYmef" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/macbook/ReChords"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/macbook/ReChords&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="ReChords" />
@@ -86,6 +102,35 @@
       <option name="presentableId" value="Default" />
       <updated>1759712004861</updated>
     </task>
+    <task id="LOCAL-00001" summary="Refactorizacion">
+      <option name="closed" value="true" />
+      <created>1759767203341</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1759767203341</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Refactorizacion">
+      <option name="closed" value="true" />
+      <created>1759767218135</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1759767218135</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Refactorizacion">
+      <option name="closed" value="true" />
+      <created>1759767230628</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759767230628</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Refactorizacion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactorizacion" />
   </component>
 </project>
