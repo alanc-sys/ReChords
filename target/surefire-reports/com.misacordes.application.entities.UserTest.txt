@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.misacordes.application.entities.UserTest
+-------------------------------------------------------------------------------
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s -- in com.misacordes.application.entities.UserTest

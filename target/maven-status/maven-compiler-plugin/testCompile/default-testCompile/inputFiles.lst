@@ -1,0 +1,14 @@
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/ApplicationTests.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/config/ApplicationConfigTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/controller/SongControllerTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/controller/auth/AuthControllerTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/dto/request/LoginRequestTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/dto/request/RegisterRequestTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/dto/request/SongRequestTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/dto/response/AuthResponseTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/dto/response/SongResponseTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/entities/SongTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/entities/UserTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/services/auth/AuthServiceTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/services/auth/JwtServiceTest.java
+/Users/macbook/ReChords/src/test/java/com/misacordes/application/services/auth/SongServiceTest.java
