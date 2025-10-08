@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChordInfo {
+public class ChordPositionInfo {
     private Integer start;        // Posición inicial en la línea (0-based)
     private String name;         // Nombre del acorde (C, Am, F, etc.)
     private Long chordId;        // ID del acorde en el catálogo (opcional)

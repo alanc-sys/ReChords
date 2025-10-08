@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ChordInfoTest {
+class ChordPositionInfoTest {
 
     @Test
     void testChordInfo_AllArgsConstructor() {

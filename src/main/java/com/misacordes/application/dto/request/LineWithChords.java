@@ -12,5 +12,5 @@ import java.util.List;
 public class LineWithChords {
     private Integer lineNumber;   // Número de línea (0-based)
     private String text;         // Texto de la línea
-    private List<ChordInfo> chords; // Lista de acordes en esta línea
+    private List<ChordPositionInfo> chords; // Lista de acordes en esta línea
 }

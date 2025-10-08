@@ -57,6 +57,7 @@ public class Song {
         @Column(name="created_at")
         private LocalDateTime createdAt;
 
+        @PrePersist
         protected void onCreate() {
                 createdAt = LocalDateTime.now();
                 updatedAt = LocalDateTime.now();

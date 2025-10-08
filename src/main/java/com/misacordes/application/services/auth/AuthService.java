@@ -4,6 +4,7 @@ import com.misacordes.application.dto.request.LoginRequest;
 import com.misacordes.application.dto.request.RegisterRequest;
 import com.misacordes.application.entities.Role;
 import com.misacordes.application.repositories.UserRepository;
+import com.misacordes.application.services.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import com.misacordes.application.entities.User;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final PlaylistService playlistService;
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -44,9 +46,13 @@ public class AuthService {
                 .country(request.getCountry())
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Crear playlists por defecto para el nuevo usuario
+        playlistService.createDefaultPlaylistsForUser(savedUser);
+        
         return AuthResponse.builder()
-                .token(jwtService.getToken(user))
+                .token(jwtService.getToken(savedUser))
                 .build();
     }
 }

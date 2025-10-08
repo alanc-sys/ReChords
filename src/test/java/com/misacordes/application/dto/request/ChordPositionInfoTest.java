@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ChordInfoTest {
+class ChordPositionInfoTest {
 
     @Test
     void testChordInfo_AllArgsConstructor() {
         // Act
-        ChordInfo chord = new ChordInfo(0, "C", 1L);
+        ChordPositionInfo chord = new ChordPositionInfo(0, "C", 1L);
 
         // Assert
         assertEquals(0, chord.getStart());
@@ -20,7 +20,7 @@ class ChordInfoTest {
     @Test
     void testChordInfo_NoArgsConstructor() {
         // Act
-        ChordInfo chord = new ChordInfo();
+        ChordPositionInfo chord = new ChordPositionInfo();
 
         // Assert
         assertNull(chord.getStart());
@@ -31,7 +31,7 @@ class ChordInfoTest {
     @Test
     void testChordInfo_Setters() {
         // Arrange
-        ChordInfo chord = new ChordInfo();
+        ChordPositionInfo chord = new ChordPositionInfo();
 
         // Act
         chord.setStart(5);
@@ -47,7 +47,7 @@ class ChordInfoTest {
     @Test
     void testChordInfo_WithNullChordId() {
         // Act
-        ChordInfo chord = new ChordInfo(0, "C", null);
+        ChordPositionInfo chord = new ChordPositionInfo(0, "C", null);
 
         // Assert
         assertEquals(0, chord.getStart());

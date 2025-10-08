@@ -12,9 +12,9 @@ class LineWithChordsTest {
     @Test
     void testLineWithChords_AllArgsConstructor() {
         // Arrange
-        List<ChordInfo> chords = Arrays.asList(
-                new ChordInfo(0, "C", 1L),
-                new ChordInfo(7, "G", 2L)
+        List<ChordPositionInfo> chords = Arrays.asList(
+                new ChordPositionInfo(0, "C", 1L),
+                new ChordPositionInfo(7, "G", 2L)
         );
 
         // Act
@@ -43,8 +43,8 @@ class LineWithChordsTest {
     void testLineWithChords_Setters() {
         // Arrange
         LineWithChords line = new LineWithChords();
-        List<ChordInfo> chords = Arrays.asList(
-                new ChordInfo(0, "C", 1L)
+        List<ChordPositionInfo> chords = Arrays.asList(
+                new ChordPositionInfo(0, "C", 1L)
         );
 
         // Act
