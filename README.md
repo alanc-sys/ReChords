@@ -342,9 +342,8 @@ SERVER_PORT=8080
 ## 📞 Soporte
 
 ### Contacto
-- 📧 **Email**: soporte@rechords.com
-- 💬 **Discord**: [ReChords Community](https://discord.gg/rechords)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/tu-usuario/rechords/issues)
+- 📧 **Email**: alancruz.sys@gmail.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/alanc-sys/rechords/issues)
 
 ### FAQ
 **P: ¿Cómo funciona el sistema de posiciones de acordes?**
