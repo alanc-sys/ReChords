@@ -3,9 +3,9 @@ package com.misacordes.application.services.auth;
 import com.misacordes.application.entities.Role;
 import com.misacordes.application.entities.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
+// import io.jsonwebtoken.ExpiredJwtException; // No utilizado
+// import io.jsonwebtoken.MalformedJwtException; // No utilizado
+// import io.jsonwebtoken.security.SignatureException; // No utilizado
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

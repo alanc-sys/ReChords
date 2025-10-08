@@ -1,6 +1,6 @@
 package com.misacordes.application.config.security;
 
-import ch.qos.logback.core.util.StringUtil;
+// import ch.qos.logback.core.util.StringUtil; // No utilizado
 import com.misacordes.application.services.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,8 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException; // No utilizado
+// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter; // No utilizado
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

@@ -24,15 +24,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
-                        sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 }
 
