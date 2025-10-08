@@ -1,0 +1,43 @@
+{
+  "title": "Amazing Grace",
+  "artist": "John Newton",
+  "album": "Hymns Collection",
+  "year": 1779,
+  "key": "C",
+  "tempo": 80,
+  "lyrics": [
+    {
+      "lineNumber": 0,
+      "text": "Amazing grace how sweet the sound",
+      "chords": [
+        { "start": 0, "name": "C", "chordId": 1 },
+        { "start": 7, "name": "G", "chordId": 2 }
+      ]
+    },
+    {
+      "lineNumber": 1,
+      "text": "That saved a wretch like me",
+      "chords": [
+        { "start": 5, "name": "Am", "chordId": 3 },
+        { "start": 12, "name": "F", "chordId": 4 }
+      ]
+    },
+    {
+      "lineNumber": 2,
+      "text": "I once was lost but now am found",
+      "chords": [
+        { "start": 0, "name": "C", "chordId": 1 },
+        { "start": 7, "name": "G", "chordId": 2 },
+        { "start": 15, "name": "C", "chordId": 1 }
+      ]
+    },
+    {
+      "lineNumber": 3,
+      "text": "Was blind but now I see",
+      "chords": [
+        { "start": 4, "name": "F", "chordId": 4 },
+        { "start": 9, "name": "C", "chordId": 1 }
+      ]
+    }
+  ]
+}

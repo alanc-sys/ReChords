@@ -3,8 +3,9 @@ package com.misacordes.application.controller;
 
 import com.misacordes.application.dto.request.RejectSongRequest;
 import com.misacordes.application.dto.response.AdminStatsResponse;
-import com.misacordes.application.dto.response.SongResponse;
+import com.misacordes.application.dto.response.SongWithChordsResponse;
 import com.misacordes.application.services.auth.SongService;
+import com.misacordes.application.services.SongAnalyticsAsyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,31 +20,32 @@ import java.util.List;
 public class adminController {
 
     private final SongService songService;
+    private final SongAnalyticsAsyncService songAnalyticsAsyncService;
 
     @GetMapping("/songs/pending")
-    public ResponseEntity<List<SongResponse>> getPendingSongs() {
+    public ResponseEntity<List<SongWithChordsResponse>> getPendingSongs() {
         try {
-            List<SongResponse> songs = songService.getPendingSongs();
+            List<SongWithChordsResponse> songs = songService.getPendingSongs();
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to obtain Songs" + e);
+            throw new RuntimeException("Failed to obtain Songs: " + e.getMessage());
         }
     }
 
     @GetMapping("/songs")
-    public ResponseEntity<List<SongResponse>> getAllSongs() {
+    public ResponseEntity<List<SongWithChordsResponse>> getAllSongs() {
         try {
-            List<SongResponse> songs = songService.getAllSongsAdmin();
+            List<SongWithChordsResponse> songs = songService.getAllSongsAdmin();
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to obtain Songs" + e);
+            throw new RuntimeException("Failed to obtain Songs: " + e.getMessage());
         }
     }
 
     @PutMapping("/songs/{id}/approve")
-    public ResponseEntity<SongResponse> approveSong(@PathVariable Long id) {
+    public ResponseEntity<SongWithChordsResponse> approveSong(@PathVariable Long id) {
         try {
-            SongResponse response = songService.approveSong(id);
+            SongWithChordsResponse response = songService.approveSong(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             throw new RuntimeException("Error al aprobar canción: " + e.getMessage());
@@ -51,11 +53,11 @@ public class adminController {
     }
 
     @PutMapping("/songs/{id}/reject")
-    public ResponseEntity<SongResponse> rejectSong(
+    public ResponseEntity<SongWithChordsResponse> rejectSong(
             @PathVariable Long id,
             @RequestBody RejectSongRequest request) {
         try {
-            SongResponse response = songService.rejectSong(id, request.getReason());
+            SongWithChordsResponse response = songService.rejectSong(id, request.getReason());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             throw new RuntimeException("Error al rechazar canción: " + e.getMessage());
@@ -63,9 +65,9 @@ public class adminController {
     }
 
     @PutMapping("/songs/{id}/unpublish")
-    public ResponseEntity<SongResponse> unpublishSong(@PathVariable Long id) {
+    public ResponseEntity<SongWithChordsResponse> unpublishSong(@PathVariable Long id) {
         try {
-            SongResponse response = songService.unpublishSong(id);
+            SongWithChordsResponse response = songService.unpublishSong(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             throw new RuntimeException("Error al despublicar canción: " + e.getMessage());
@@ -82,5 +84,19 @@ public class adminController {
     public ResponseEntity<AdminStatsResponse> getStats() {
         AdminStatsResponse stats = songService.getAdminStats();
         return ResponseEntity.ok(stats);
+    }
+
+    /**
+     * POST /api/admin/analytics/process-all
+     * Procesar analítica de todas las canciones de forma asíncrona (solo admin)
+     */
+    @PostMapping("/analytics/process-all")
+    public ResponseEntity<String> processAllSongsAnalytics() {
+        try {
+            songAnalyticsAsyncService.processMultipleSongsAnalyticsAsync();
+            return ResponseEntity.ok("Procesamiento masivo de analítica iniciado");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al iniciar procesamiento masivo: " + e.getMessage());
+        }
     }
 }

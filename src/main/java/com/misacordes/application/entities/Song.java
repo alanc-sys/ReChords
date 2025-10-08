@@ -34,6 +34,10 @@ public class Song {
         @Column(name="lyrics_data", columnDefinition = "TEXT")
         private String lyricsData;
 
+        @Lob
+        @Column(name="chords_map", columnDefinition = "TEXT")
+        private String chordsMap; // JSON con letra y posiciones de acordes
+
         @Enumerated(EnumType.STRING)
         @Column(nullable = false)
         private SongStatus status;

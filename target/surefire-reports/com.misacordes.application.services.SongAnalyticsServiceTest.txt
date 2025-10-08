@@ -1,0 +1,142 @@
+-------------------------------------------------------------------------------
+Test set: com.misacordes.application.services.SongAnalyticsServiceTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 0.064 s <<< FAILURE! -- in com.misacordes.application.services.SongAnalyticsServiceTest
+com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnEmptySet_WhenInvalidJson -- Time elapsed: 0.021 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnEmptySet_WhenInvalidJson(SongAnalyticsServiceTest.java:227)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnEmptySet_WhenInvalidJson(SongAnalyticsServiceTest.java:226)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnFalse_WhenInvalidJson -- Time elapsed: 0.005 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnFalse_WhenInvalidJson(SongAnalyticsServiceTest.java:178)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnFalse_WhenInvalidJson(SongAnalyticsServiceTest.java:177)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnUniqueChords_WhenValidChordsMap -- Time elapsed: 0.002 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnUniqueChords_WhenValidChordsMap(SongAnalyticsServiceTest.java:197)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.extractUniqueChords_ShouldReturnUniqueChords_WhenValidChordsMap(SongAnalyticsServiceTest.java:196)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnAnalytics_WhenValidChordsMap -- Time elapsed: 0.003 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnAnalytics_WhenValidChordsMap(SongAnalyticsServiceTest.java:90)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnAnalytics_WhenValidChordsMap(SongAnalyticsServiceTest.java:89)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnTrue_WhenValidJson -- Time elapsed: 0.003 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnTrue_WhenValidJson(SongAnalyticsServiceTest.java:146)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.validateChordsMap_ShouldReturnTrue_WhenValidJson(SongAnalyticsServiceTest.java:145)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnEmptyAnalytics_WhenInvalidJson -- Time elapsed: 0.004 s <<< ERROR!
+org.mockito.exceptions.misusing.InvalidUseOfMatchersException: 
+
+Invalid use of argument matchers!
+2 matchers expected, 1 recorded:
+-> at com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnEmptyAnalytics_WhenInvalidJson(SongAnalyticsServiceTest.java:126)
+
+This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(any(), "raw String");
+When using matchers, all arguments have to be provided by matchers.
+For example:
+    //correct:
+    someMethod(any(), eq("String by matcher"));
+
+For more info see javadoc for Matchers class.
+
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3869)
+	at com.misacordes.application.services.SongAnalyticsServiceTest.analyzeSongChords_ShouldReturnEmptyAnalytics_WhenInvalidJson(SongAnalyticsServiceTest.java:125)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+

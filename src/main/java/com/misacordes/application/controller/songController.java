@@ -1,9 +1,9 @@
 package com.misacordes.application.controller;
 
-import com.misacordes.application.dto.request.ChordPosition;
-import com.misacordes.application.dto.request.SongRequest;
+import com.misacordes.application.dto.request.SongWithChordsRequest;
 import com.misacordes.application.dto.response.ChordInfo;
-import com.misacordes.application.dto.response.SongResponse;
+import com.misacordes.application.dto.response.SongWithChordsResponse;
+import com.misacordes.application.dto.response.SongAnalyticsResponse;
 import com.misacordes.application.services.auth.ChordService;
 import com.misacordes.application.services.auth.SongService;
 import lombok.RequiredArgsConstructor;
@@ -21,32 +21,30 @@ public class songController {
     private final ChordService chordService;
 
     @PostMapping
-    public ResponseEntity<SongResponse> createdSong(@RequestBody SongRequest request){
+    public ResponseEntity<SongWithChordsResponse> createSong(@RequestBody SongWithChordsRequest request){
         try {
-            SongResponse response = songService.createSong(request);
+            SongWithChordsResponse response = songService.createSongWithChords(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create the song" + e.getMessage());
+            throw new RuntimeException("Failed to create the song: " + e.getMessage());
         }
-
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <SongResponse> updateSong(
+    public ResponseEntity<SongWithChordsResponse> updateSong(
             @PathVariable long id,
-            @RequestBody SongRequest request){
+            @RequestBody SongWithChordsRequest request){
         try {
-            SongResponse response = songService.updateSong(id, request);
+            SongWithChordsResponse response = songService.updateSongWithChords(id, request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to actualize song" + e);
+            throw new RuntimeException("Failed to update song: " + e.getMessage());
         }
-
     }
+    
     @GetMapping("/{id}")
-    public ResponseEntity<SongResponse> getSongById(@PathVariable long id){
-        return ResponseEntity.ok(songService.getSongById(id));
+    public ResponseEntity<SongWithChordsResponse> getSongById(@PathVariable long id){
+        return ResponseEntity.ok(songService.getSongWithChordsById(id));
     }
     
     @DeleteMapping("/{id}")
@@ -56,37 +54,39 @@ public class songController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<SongResponse>> getMySongs(){
+    public ResponseEntity<List<SongWithChordsResponse>> getMySongs(){
         try {
-            List<SongResponse> songs = songService.getMySongs();
+            List<SongWithChordsResponse> songs = songService.getMySongsWithChords();
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get songs" + e);
+            throw new RuntimeException("Failed to get songs: " + e.getMessage());
         }
     }
 
     @GetMapping("/public")
-    public ResponseEntity <List<SongResponse>> getPublicSongs(){
+    public ResponseEntity<List<SongWithChordsResponse>> getPublicSongs(){
         try {
-            List<SongResponse> songs = songService.getPublicSongs();
+            List<SongWithChordsResponse> songs = songService.getPublicSongsWithChords();
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to recuperated public songs" + e);
+            throw new RuntimeException("Failed to get public songs: " + e.getMessage());
         }
     }
+    
     @GetMapping("/search")
-    public ResponseEntity<List<SongResponse>> searchSongs(@RequestParam String q) {
+    public ResponseEntity<List<SongWithChordsResponse>> searchSongs(@RequestParam String q) {
         try {
-            List<SongResponse> songs = songService.searchPublicSongs(q);
+            List<SongWithChordsResponse> songs = songService.searchPublicSongsWithChords(q);
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
             throw new RuntimeException("Error al buscar canciones: " + e.getMessage());
         }
     }
+    
     @PutMapping("/{id}/submit")
-    public ResponseEntity<SongResponse> submitForApproval(@PathVariable Long id) {
+    public ResponseEntity<SongWithChordsResponse> submitForApproval(@PathVariable Long id) {
         try {
-            SongResponse response = songService.submitForApproval(id);
+            SongWithChordsResponse response = songService.submitForApprovalWithChords(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             throw new RuntimeException("Error al enviar canción: " + e.getMessage());
@@ -122,20 +122,18 @@ public class songController {
             throw new RuntimeException("Error al obtener acordes comunes: " + e.getMessage());
         }
     }
-    
+
     /**
-     * PUT /api/songs/{id}/chords
-     * Actualizar solo las posiciones de acordes de una canción
+     * GET /api/songs/{id}/analytics
+     * Obtener analítica de una canción (estadísticas de acordes)
      */
-    @PutMapping("/{id}/chords")
-    public ResponseEntity<SongResponse> updateChordPositions(
-            @PathVariable Long id,
-            @RequestBody List<ChordPosition> chordPositions) {
+    @GetMapping("/{id}/analytics")
+    public ResponseEntity<SongAnalyticsResponse> getSongAnalytics(@PathVariable Long id) {
         try {
-            SongResponse response = songService.updateChordPositions(id, chordPositions);
+            SongAnalyticsResponse response = songService.getSongAnalytics(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar acordes: " + e.getMessage());
+            throw new RuntimeException("Error al obtener analítica de la canción: " + e.getMessage());
         }
     }
 

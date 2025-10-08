@@ -27,7 +27,6 @@ class JwtServiceTest {
     private JwtService jwtService;
 
     private User testUser;
-    private UserDetails mockUserDetails;
 
     @BeforeEach
     void setUp() {
