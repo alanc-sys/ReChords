@@ -1,31 +1,34 @@
-package com.misacordes.application.services.auth;
+package com.misacordes.application.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.misacordes.application.dto.request.ChordPositionInfo;
+import com.misacordes.application.dto.request.LineWithChords;
 import com.misacordes.application.dto.request.SongWithChordsRequest;
 import com.misacordes.application.dto.response.AdminStatsResponse;
+import com.misacordes.application.dto.response.PageResponse;
 import com.misacordes.application.dto.response.SongWithChordsResponse;
-import com.misacordes.application.services.SongAnalyticsService;
-import com.misacordes.application.services.SongAnalyticsAsyncService;
 import com.misacordes.application.entities.Role;
 import com.misacordes.application.entities.Song;
 import com.misacordes.application.entities.User;
 import com.misacordes.application.repositories.SongRepository;
 import com.misacordes.application.repositories.UserRepository;
+import com.misacordes.application.utils.ChordTransposer;
 import com.misacordes.application.utils.SongStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class SongService {
+public class SongService extends BaseService {
 
     private final SongRepository songRepository;
     private final UserRepository userRepository;
@@ -33,37 +36,8 @@ public class SongService {
     private final SongAnalyticsAsyncService songAnalyticsAsyncService;
     private final ObjectMapper objectMapper;
 
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
-    }
 
-    public List<SongWithChordsResponse> getMySongsWithChords() {
-        User currentUser = getCurrentUser();
-        List<Song> songs = songRepository.findByCreatedById(currentUser.getId());
 
-        return songs.stream()
-                .map(this::mapToSongWithChordsResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<SongWithChordsResponse> getPublicSongsWithChords() {
-        List<Song> songs = songRepository.findByIsPublicTrueAndStatus(SongStatus.APPROVED);
-
-        return songs.stream()
-                .map(this::mapToSongWithChordsResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<SongWithChordsResponse> searchPublicSongsWithChords(String query) {
-        List<Song> songs = songRepository
-                .findByIsPublicTrueAndStatusAndTitleContainingIgnoreCaseOrArtistContainingIgnoreCase(
-                        SongStatus.APPROVED, query, query);
-
-        return songs.stream()
-                .map(this::mapToSongWithChordsResponse)
-                .collect(Collectors.toList());
-    }
 
     public SongWithChordsResponse submitForApprovalWithChords(Long id) {
         User currentUser = getCurrentUser();
@@ -81,14 +55,6 @@ public class SongService {
     }
 
     // ========== ADMIN ==========
-    public List<SongWithChordsResponse> getPendingSongs() {
-        verifyAdmin();
-        List<Song> songs = songRepository.findByStatus(SongStatus.PENDING);
-
-        return songs.stream()
-                .map(this::mapToSongWithChordsResponse)
-                .collect(Collectors.toList());
-    }
 
     public SongWithChordsResponse approveSong(Long id) {
         verifyAdmin();
@@ -134,12 +100,6 @@ public class SongService {
         return song.getIsPublic() && song.getStatus() == SongStatus.APPROVED;
     }
 
-    private void verifyAdmin() {
-        User currentUser = getCurrentUser();
-        if (currentUser.getRole() != Role.ADMIN) {
-            throw new RuntimeException("No tienes permisos de administrador");
-        }
-    }
 
     public void deleteSong(Long id) {
         User currentUser = getCurrentUser();
@@ -153,14 +113,6 @@ public class SongService {
         songRepository.delete(song);
     }
 
-    public List<SongWithChordsResponse> getAllSongsAdmin() {
-        verifyAdmin();
-        List<Song> songs = songRepository.findAll();
-
-        return songs.stream()
-                .map(this::mapToSongWithChordsResponse)
-                .collect(Collectors.toList());
-    }
 
     public SongWithChordsResponse unpublishSong(Long id) {
         verifyAdmin();
@@ -200,15 +152,9 @@ public class SongService {
                 .build();
     }
 
-    // ========== MÉTODOS PARA EL NUEVO FORMATO JSON CON ACORDES ==========
-
-    /**
-     * Crear una canción con el nuevo formato JSON que incluye letra y acordes
-     */
     public SongWithChordsResponse createSongWithChords(SongWithChordsRequest request) {
         User currentUser = getCurrentUser();
-        
-        // Validar el JSON de acordes
+
         if (!songAnalyticsService.validateChordsMap(convertToJson(request))) {
             throw new RuntimeException("Formato de acordes inválido");
         }
@@ -225,16 +171,12 @@ public class SongService {
                 .build();
 
         Song savedSong = songRepository.save(song);
-        
-        // Procesar asíncronamente para analítica (opcional)
+
         processSongAnalyticsAsync(savedSong);
         
         return mapToSongWithChordsResponse(savedSong);
     }
 
-    /**
-     * Obtener una canción con el formato JSON de acordes
-     */
     public SongWithChordsResponse getSongWithChordsById(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findById(id)
@@ -247,9 +189,6 @@ public class SongService {
         return mapToSongWithChordsResponse(song);
     }
 
-    /**
-     * Actualizar una canción con el nuevo formato JSON
-     */
     public SongWithChordsResponse updateSongWithChords(Long id, SongWithChordsRequest request) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
@@ -258,8 +197,7 @@ public class SongService {
         if (song.getStatus() != SongStatus.DRAFT && song.getStatus() != SongStatus.REJECTED) {
             throw new RuntimeException("No puedes editar una canción en estado " + song.getStatus());
         }
-        
-        // Validar el JSON de acordes
+
         if (!songAnalyticsService.validateChordsMap(convertToJson(request))) {
             throw new RuntimeException("Formato de acordes inválido");
         }
@@ -275,16 +213,11 @@ public class SongService {
         }
 
         Song updated = songRepository.save(song);
-        
-        // Procesar asíncronamente para analítica
+
         processSongAnalyticsAsync(updated);
         
         return mapToSongWithChordsResponse(updated);
     }
-
-    /**
-     * Obtener analítica de una canción
-     */
     public com.misacordes.application.dto.response.SongAnalyticsResponse getSongAnalytics(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findById(id)
@@ -297,9 +230,6 @@ public class SongService {
         return songAnalyticsService.analyzeSongChords(song);
     }
 
-    /**
-     * Convertir SongWithChordsRequest a JSON string
-     */
     private String convertToJson(SongWithChordsRequest request) {
         try {
             return objectMapper.writeValueAsString(request);
@@ -308,9 +238,51 @@ public class SongService {
         }
     }
 
-    /**
-     * Mapear Song a SongWithChordsResponse
-     */
+    public PageResponse<SongWithChordsResponse> getMySongsWithChordsPaginated(Pageable pageable) {
+        User currentUser = getCurrentUser();
+        Page<Song> songsPage = songRepository.findByCreatedById(currentUser.getId(), pageable);
+
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+
+        return PageResponse.from(responsePage);
+    }
+
+    public PageResponse<SongWithChordsResponse> getPublicSongsWithChordsPaginated(Pageable pageable) {
+        Page<Song> songsPage = songRepository.findByIsPublicTrueAndStatus(SongStatus.APPROVED, pageable);
+
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+
+        return PageResponse.from(responsePage);
+    }
+
+    public PageResponse<SongWithChordsResponse> searchPublicSongsWithChordsPaginated(String query, Pageable pageable) {
+        Page<Song> songsPage = songRepository
+                .findByIsPublicTrueAndStatusAndTitleContainingIgnoreCaseOrArtistContainingIgnoreCase(
+                        SongStatus.APPROVED, query, query, pageable);
+
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+
+        return PageResponse.from(responsePage);
+    }
+
+    public PageResponse<SongWithChordsResponse> getPendingSongsPaginated(Pageable pageable) {
+        verifyAdmin();
+        Page<Song> songsPage = songRepository.findByStatus(SongStatus.PENDING, pageable);
+
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+
+        return PageResponse.from(responsePage);
+    }
+
+    public PageResponse<SongWithChordsResponse> getAllSongsAdminPaginated(Pageable pageable) {
+        verifyAdmin();
+        Page<Song> songsPage = songRepository.findAll(pageable);
+
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+
+        return PageResponse.from(responsePage);
+    }
+
     private SongWithChordsResponse mapToSongWithChordsResponse(Song song) {
         try {
             SongWithChordsRequest songData = null;
@@ -322,34 +294,63 @@ public class SongService {
             }
             
             return SongWithChordsResponse.builder()
-                    .id(song.getId())
-                    .title(song.getTitle())
-                    .artist(song.getArtist())
-                    .album(song.getAlbum())
-                    .year(song.getYear())
+                .id(song.getId())
+                .title(song.getTitle())
+                .artist(song.getArtist())
+                .album(song.getAlbum())
+                .year(song.getYear())
                     .key(songData != null ? songData.getKey() : null)
                     .tempo(songData != null ? songData.getTempo() : null)
-                    .status(song.getStatus())
-                    .isPublic(song.getIsPublic())
-                    .rejectionReason(song.getRejectionReason())
-                    .createdAt(song.getCreatedAt())
-                    .publishedAt(song.getPublishedAt())
+                .status(song.getStatus())
+                .isPublic(song.getIsPublic())
+                .rejectionReason(song.getRejectionReason())
+                .createdAt(song.getCreatedAt())
+                .publishedAt(song.getPublishedAt())
                     .lyrics(songData != null ? songData.getLyrics() : null)
                     .createdBy(SongWithChordsResponse.CreatorInfo.builder()
-                            .id(song.getCreatedBy().getId())
-                            .username(song.getCreatedBy().getUsername())
-                            .firstname(song.getCreatedBy().getFirstname())
-                            .build())
+                        .id(song.getCreatedBy().getId())
+                        .username(song.getCreatedBy().getUsername())
+                        .firstname(song.getCreatedBy().getFirstname())
+                        .build())
                     .build();
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error parsing song chords map", e);
         }
     }
 
-    /**
-     * Procesar analítica de la canción de forma asíncrona
-     */
     private void processSongAnalyticsAsync(Song song) {
         songAnalyticsAsyncService.processSongAnalyticsAsync(song.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public SongWithChordsResponse transposeSong(Long songId, int semitones) {
+        SongWithChordsResponse response = getSongWithChordsById(songId);
+
+        if (response.getLyrics() == null) {
+            return response;
+        }
+        List<LineWithChords> transposedLyrics = new ArrayList<>();
+
+        for (LineWithChords line : response.getLyrics()) {
+            List<ChordPositionInfo> transposedChords = new ArrayList<>();
+            if (line.getChords() != null) {
+                for (ChordPositionInfo originalChord : line.getChords()) {
+                    String newChordName = ChordTransposer.transpose(originalChord.getName(), semitones);
+                    transposedChords.add(new ChordPositionInfo(
+                            originalChord.getStart(),
+                            newChordName,
+                            null
+                    ));
+                }
+            }
+            transposedLyrics.add(new LineWithChords(line.getLineNumber(), line.getText(), transposedChords));
+        }
+
+        response.setLyrics(transposedLyrics);
+        if (response.getKey() != null) {
+            response.setKey(ChordTransposer.transpose(response.getKey(), semitones));
+        }
+
+        return response;
     }
 }

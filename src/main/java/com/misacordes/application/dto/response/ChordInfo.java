@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class ChordInfo {
     
     private Long id;
-    private String name;              // "C", "Am"
-    private String fullName;          // "Do mayor", "La menor"
-    private String fingerPositions;   // Posiciones de dedos
+    private String name;
+    private String fullName;
+    private String fingerPositions;
     private DifficultyLevel difficulty;
-    private Boolean isCommon;         // Si es un acorde común
-    private Integer displayOrder;     // Orden de visualización
+    private Boolean isCommon;
+    private Integer displayOrder;
 }

@@ -2,16 +2,22 @@ package com.misacordes.application.controller;
 
 import com.misacordes.application.dto.request.SongWithChordsRequest;
 import com.misacordes.application.dto.response.ChordInfo;
+import com.misacordes.application.dto.response.PageResponse;
 import com.misacordes.application.dto.response.SongWithChordsResponse;
 import com.misacordes.application.dto.response.SongAnalyticsResponse;
-import com.misacordes.application.services.auth.ChordService;
-import com.misacordes.application.services.auth.SongService;
+import com.misacordes.application.services.SongImportService;
+import com.misacordes.application.services.ChordService;
+import com.misacordes.application.services.SongService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/songs")
@@ -19,6 +25,7 @@ import java.util.List;
 public class songController {
     private final SongService songService;
     private final ChordService chordService;
+    private final SongImportService songImportService;
 
     @PostMapping
     public ResponseEntity<SongWithChordsResponse> createSong(@RequestBody SongWithChordsRequest request){
@@ -41,48 +48,21 @@ public class songController {
             throw new RuntimeException("Failed to update song: " + e.getMessage());
         }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<SongWithChordsResponse> getSongById(@PathVariable long id){
         return ResponseEntity.ok(songService.getSongWithChordsById(id));
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable long id){
         songService.deleteSong(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/my")
-    public ResponseEntity<List<SongWithChordsResponse>> getMySongs(){
-        try {
-            List<SongWithChordsResponse> songs = songService.getMySongsWithChords();
-            return ResponseEntity.ok(songs);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get songs: " + e.getMessage());
-        }
-    }
 
-    @GetMapping("/public")
-    public ResponseEntity<List<SongWithChordsResponse>> getPublicSongs(){
-        try {
-            List<SongWithChordsResponse> songs = songService.getPublicSongsWithChords();
-            return ResponseEntity.ok(songs);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get public songs: " + e.getMessage());
-        }
-    }
-    
-    @GetMapping("/search")
-    public ResponseEntity<List<SongWithChordsResponse>> searchSongs(@RequestParam String q) {
-        try {
-            List<SongWithChordsResponse> songs = songService.searchPublicSongsWithChords(q);
-            return ResponseEntity.ok(songs);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al buscar canciones: " + e.getMessage());
-        }
-    }
-    
+
+
     @PutMapping("/{id}/submit")
     public ResponseEntity<SongWithChordsResponse> submitForApproval(@PathVariable Long id) {
         try {
@@ -92,13 +72,7 @@ public class songController {
             throw new RuntimeException("Error al enviar canción: " + e.getMessage());
         }
     }
-    
-    // ========== ENDPOINTS PARA ACORDES ==========
-    
-    /**
-     * GET /api/songs/available-chords
-     * Obtener todos los acordes disponibles para arrastrar
-     */
+
     @GetMapping("/available-chords")
     public ResponseEntity<List<ChordInfo>> getAvailableChords() {
         try {
@@ -108,11 +82,7 @@ public class songController {
             throw new RuntimeException("Error al obtener acordes: " + e.getMessage());
         }
     }
-    
-    /**
-     * GET /api/songs/common-chords
-     * Obtener solo acordes comunes para selección rápida
-     */
+
     @GetMapping("/common-chords")
     public ResponseEntity<List<ChordInfo>> getCommonChords() {
         try {
@@ -123,10 +93,6 @@ public class songController {
         }
     }
 
-    /**
-     * GET /api/songs/{id}/analytics
-     * Obtener analítica de una canción (estadísticas de acordes)
-     */
     @GetMapping("/{id}/analytics")
     public ResponseEntity<SongAnalyticsResponse> getSongAnalytics(@PathVariable Long id) {
         try {
@@ -137,4 +103,89 @@ public class songController {
         }
     }
 
+    @PostMapping("/import")
+    public ResponseEntity<SongWithChordsRequest> importSong(@RequestBody String rawText) {
+        try {
+            SongWithChordsRequest parsedRequest = songImportService.parse(rawText);
+            return ResponseEntity.ok(parsedRequest);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to import song: " + e.getMessage());
+        }
+    }
+    @GetMapping("/{id}/transpose")
+    public ResponseEntity<SongWithChordsResponse> transposeSong(
+            @PathVariable Long id,
+            @RequestParam int semitones) {
+        try {
+            SongWithChordsResponse response = songService.transposeSong(id, semitones);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to transpose chords: " + e);
+        }
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<PageResponse<SongWithChordsResponse>> getMySongsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+        try {
+            Pageable pageable = createPageable(page, size, sort);
+            PageResponse<SongWithChordsResponse> response = songService.getMySongsWithChordsPaginated(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get songs: " + e.getMessage());
+        }
+    }
+
+        @GetMapping("/public")
+        public ResponseEntity<PageResponse<SongWithChordsResponse>> getPublicSongsPaginated(
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "20") int size,
+                @RequestParam(defaultValue = "publishedAt,desc") String[] sort) {
+            try {
+                Pageable pageable = createPageable(page, size, sort);
+                PageResponse<SongWithChordsResponse> response = songService.getPublicSongsWithChordsPaginated(pageable);
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to get public songs: " + e.getMessage());
+            }
+        }
+
+        @GetMapping("/search")
+        public ResponseEntity<PageResponse<SongWithChordsResponse>> searchSongsPaginated(
+                @RequestParam String q,
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "20") int size,
+                @RequestParam(defaultValue = "title,asc") String[] sort) {
+            try {
+                Pageable pageable = createPageable(page, size, sort);
+                PageResponse<SongWithChordsResponse> response = songService.searchPublicSongsWithChordsPaginated(q, pageable);
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al buscar canciones: " + e.getMessage());
+            }
+        }
+
+    private Pageable createPageable(int page, int size, String[] sort) {
+        if (size > 20) {
+            size = 20;
+        }
+
+        if (size < 1) {
+            size = 1;
+        }
+
+        Sort.Direction direction = Sort.Direction.DESC;
+        String property = "createdAt";
+
+        if (sort.length > 0) {
+            property = sort[0];
+            if (sort.length > 1) {
+                direction = Sort.Direction.fromString(sort[1]);
+            }
+        }
+
+        return PageRequest.of(page, size, Sort.by(direction, property));
+    }
 }

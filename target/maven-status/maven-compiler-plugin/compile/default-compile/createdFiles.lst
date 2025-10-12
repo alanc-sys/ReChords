@@ -1,1 +1,5 @@
-com/misacordes/application/dto/request/ChordPositionInfo.class
+com/misacordes/application/services/auth/SongService$1.class
+com/misacordes/application/utils/SongStatus.class
+com/misacordes/application/utils/ChordTransposer.class
+com/misacordes/application/services/SongImportService.class
+com/misacordes/application/services/auth/SongService.class

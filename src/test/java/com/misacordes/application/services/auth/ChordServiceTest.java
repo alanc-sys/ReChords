@@ -9,6 +9,7 @@ import com.misacordes.application.entities.DifficultyLevel;
 import com.misacordes.application.entities.Role;
 import com.misacordes.application.entities.User;
 import com.misacordes.application.repositories.ChordCatalogRepository;
+import com.misacordes.application.services.ChordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

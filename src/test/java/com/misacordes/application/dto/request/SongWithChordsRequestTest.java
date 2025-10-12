@@ -24,7 +24,8 @@ class SongWithChordsRequestTest {
                 2024,
                 "C",
                 120,
-                lyrics
+                lyrics,
+                1L
         );
 
         // Assert
@@ -35,6 +36,7 @@ class SongWithChordsRequestTest {
         assertEquals("C", request.getKey());
         assertEquals(120, request.getTempo());
         assertEquals(1, request.getLyrics().size());
+        assertEquals(1L, request.getCreatedBy());
     }
 
     @Test
@@ -50,6 +52,7 @@ class SongWithChordsRequestTest {
         assertNull(request.getKey());
         assertNull(request.getTempo());
         assertNull(request.getLyrics());
+        assertNull(request.getCreatedBy());
     }
 
     @Test
@@ -68,6 +71,7 @@ class SongWithChordsRequestTest {
         request.setKey("C");
         request.setTempo(120);
         request.setLyrics(lyrics);
+        request.setCreatedBy(1L);
 
         // Assert
         assertEquals("Test Song", request.getTitle());
@@ -77,5 +81,6 @@ class SongWithChordsRequestTest {
         assertEquals("C", request.getKey());
         assertEquals(120, request.getTempo());
         assertEquals(1, request.getLyrics().size());
+        assertEquals(1L, request.getCreatedBy());
     }
 }

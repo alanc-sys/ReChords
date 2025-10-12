@@ -1,4 +1,4 @@
-package com.misacordes.application.services.auth;
+package com.misacordes.application.services;
 
 import com.misacordes.application.dto.response.ChordInfo;
 import com.misacordes.application.dto.response.ChordResponse;
@@ -6,12 +6,8 @@ import com.misacordes.application.dto.request.ChordRequest;
 import com.misacordes.application.entities.ChordCatalog;
 import com.misacordes.application.entities.ChordCategory;
 import com.misacordes.application.entities.DifficultyLevel;
-import com.misacordes.application.entities.Role;
-import com.misacordes.application.entities.User;
 import com.misacordes.application.repositories.ChordCatalogRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,21 +15,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ChordService {
+public class ChordService extends BaseService {
 
     private final ChordCatalogRepository chordCatalogRepository;
-
-    private User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (User) auth.getPrincipal();
-    }
-
-    private void verifyAdmin() {
-        User currentUser = getCurrentUser();
-        if (currentUser.getRole() != Role.ADMIN) {
-            throw new RuntimeException("No tienes permisos de administrador");
-        }
-    }
 
     // ========== CONSULTAS PÚBLICAS ==========
 

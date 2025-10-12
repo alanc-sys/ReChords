@@ -1,6 +1,7 @@
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/Application.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/config/ApplicationConfig.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/config/AsyncConfig.java
+/Users/macbook/ReChords/src/main/java/com/misacordes/application/config/CorsConfig.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/config/DataSeeder.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/config/security/JwtAuthenticationFilter.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/config/security/SecurityConfig.java
@@ -42,11 +43,14 @@
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/repositories/PlaylistSongRepository.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/repositories/SongRepository.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/repositories/UserRepository.java
+/Users/macbook/ReChords/src/main/java/com/misacordes/application/services/BaseService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/PlaylistService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/SongAnalyticsAsyncService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/SongAnalyticsService.java
+/Users/macbook/ReChords/src/main/java/com/misacordes/application/services/SongImportService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/auth/AuthService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/auth/ChordService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/auth/JwtService.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/services/auth/SongService.java
+/Users/macbook/ReChords/src/main/java/com/misacordes/application/utils/ChordTransposer.java
 /Users/macbook/ReChords/src/main/java/com/misacordes/application/utils/SongStatus.java

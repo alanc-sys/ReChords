@@ -6,6 +6,7 @@ import com.misacordes.application.dto.response.AuthResponse;
 import com.misacordes.application.entities.Role;
 import com.misacordes.application.entities.User;
 import com.misacordes.application.repositories.UserRepository;
+import com.misacordes.application.services.PlaylistService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +37,9 @@ class AuthServiceTest {
 
     @Mock
     private AuthenticationManager authenticationManager;
+
+    @Mock
+    private PlaylistService playlistService;
 
     @InjectMocks
     private AuthService authService;

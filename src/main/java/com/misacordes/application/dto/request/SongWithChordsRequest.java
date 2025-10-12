@@ -17,4 +17,5 @@ public class SongWithChordsRequest {
     private String key;          // Tonalidad de la canción (C, Am, etc.)
     private Integer tempo;       // BPM de la canción
     private List<LineWithChords> lyrics; // Líneas con texto y acordes
+    private Long createdBy;      // ID del usuario que crea la canción
 }

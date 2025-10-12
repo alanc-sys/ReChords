@@ -1,7 +1,7 @@
 package com.misacordes.application.controller;
 
 import com.misacordes.application.dto.response.ChordResponse;
-import com.misacordes.application.services.auth.ChordService;
+import com.misacordes.application.services.ChordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class ChordCatalogController {
     
     private final ChordService chordService;
     
-    @GetMapping("/chords")
+    @GetMapping
     public ResponseEntity<List<ChordResponse>> getAvailableChords() {
         return ResponseEntity.ok(chordService.getAllChords());
     }

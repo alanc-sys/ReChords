@@ -4,7 +4,7 @@ import com.misacordes.application.dto.response.ChordResponse;
 import com.misacordes.application.dto.request.ChordRequest;
 import com.misacordes.application.entities.ChordCategory;
 import com.misacordes.application.entities.DifficultyLevel;
-import com.misacordes.application.services.auth.ChordService;
+import com.misacordes.application.services.ChordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,6 @@ public class ChordController {
 
     private final ChordService chordService;
 
-    // ========== ENDPOINTS PÚBLICOS (usuarios normales) ==========
 
     @GetMapping
     public ResponseEntity<List<ChordResponse>> getAllChords() {

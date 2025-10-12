@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.misacordes.application.ApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.68 s -- in com.misacordes.application.ApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.19 s -- in com.misacordes.application.ApplicationTests

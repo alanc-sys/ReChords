@@ -4,7 +4,7 @@ package com.misacordes.application.controller;
 import com.misacordes.application.dto.request.RejectSongRequest;
 import com.misacordes.application.dto.response.AdminStatsResponse;
 import com.misacordes.application.dto.response.SongWithChordsResponse;
-import com.misacordes.application.services.auth.SongService;
+import com.misacordes.application.services.SongService;
 import com.misacordes.application.services.SongAnalyticsAsyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

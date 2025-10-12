@@ -5,11 +5,14 @@
 1. [Visión General](#visión-general)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
 3. [Flujo de Trabajo de Acordes](#flujo-de-trabajo-de-acordes)
-4. [Base de Datos](#base-de-datos)
-5. [Seguridad](#seguridad)
-6. [Patrones de Diseño](#patrones-de-diseño)
-7. [Flujo de Datos](#flujo-de-datos)
-8. [Consideraciones de Performance](#consideraciones-de-performance)
+4. [Sistema de Importación](#sistema-de-importación)
+5. [Sistema de Playlists](#sistema-de-playlists)
+6. [Base de Datos](#base-de-datos)
+7. [Seguridad](#seguridad)
+8. [Patrones de Diseño](#patrones-de-diseño)
+9. [Flujo de Datos](#flujo-de-datos)
+10. [Consideraciones de Performance](#consideraciones-de-performance)
+11. [Sistema de Paginación](#sistema-de-paginación)
 
 ---
 
@@ -18,12 +21,17 @@
 ReChords es una aplicación de **biblioteca musical personal** que permite a los usuarios gestionar canciones con **posiciones precisas de acordes**. La aplicación combina funcionalidades de **gestión de contenido** con **herramientas educativas** para músicos.
 
 ### Características Principales:
-- 🎵 **Gestión de canciones** con letras y acordes
+- 🎵 **Gestión de canciones** con letras y acordes en formato JSON
 - 🎸 **Sistema de acordes** con posiciones precisas
+- 📥 **Importación automática** de canciones desde texto plano
+- 📚 **Sistema de playlists/bibliotecas** personalizadas
+- 🏷️ **Playlists por defecto** (Favoritas, Mis Creaciones)
 - 👥 **Roles de usuario** (USER/ADMIN)
 - 🔄 **Workflow de aprobación** para contenido
 - 📊 **Estadísticas y administración**
 - 🔍 **Búsqueda y filtrado** avanzado
+- 📄 **Paginación** en todos los endpoints de listado
+- ⚡ **Procesamiento asíncrono** de analytics
 
 ---
 
@@ -223,48 +231,287 @@ Línea 1:      Segunda línea
 
 ---
 
+## 📥 Sistema de Importación
+
+El sistema de importación permite a los usuarios convertir texto plano con formato de canción (letras y acordes) en el formato JSON estructurado que utiliza ReChords.
+
+### Arquitectura del Sistema de Importación
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SISTEMA DE IMPORTACIÓN                     │
+│                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐        │
+│  │   Raw Text  │    │ SongImport  │    │ SongWith    │        │
+│  │   Input     │───►│   Service   │───►│ Chords      │        │
+│  │             │    │             │    │ Request     │        │
+│  └─────────────┘    └─────────────┘    └─────────────┘        │
+│         │                   │                   │              │
+│         │                   ▼                   │              │
+│         │            ┌─────────────┐            │              │
+│         │            │ Chord       │            │              │
+│         │            │ Catalog     │            │              │
+│         │            │ Repository  │            │              │
+│         │            └─────────────┘            │              │
+│         │                                       │              │
+│         └───────────────────────────────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Características del Importador
+
+#### 🎯 Detección Automática
+- **Título y Artista**: Extrae automáticamente del formato "Artista - Título"
+- **Secciones**: Reconoce headers como `[Verse 1]`, `[Chorus]`, etc.
+- **Líneas de acordes**: Identifica líneas que contienen principalmente acordes
+
+#### 🎸 Reconocimiento de Acordes
+- **Regex avanzado**: Patrón que reconoce acordes estándar (C, Am, F#m7, etc.)
+- **Validación**: Verifica acordes contra el catálogo de acordes
+- **Posicionamiento**: Calcula posiciones exactas de acordes en el texto
+
+#### 📝 Procesamiento de Texto
+- **Emparejamiento**: Asocia líneas de acordes con líneas de letra
+- **Filtrado**: Ignora tablaturas y metadatos irrelevantes
+- **Limpieza**: Normaliza espacios y caracteres especiales
+
+### Algoritmo de Importación
+
+#### 1. Análisis de Líneas
+```java
+for (String line : lines) {
+    if (isChordLine(line)) {
+        // Procesar línea de acordes
+        processChordLine(line);
+    } else if (isSectionHeader(line)) {
+        // Procesar header de sección
+        processSectionHeader(line);
+    } else {
+        // Procesar línea de letra
+        processLyricLine(line);
+    }
+}
+```
+
+#### 2. Detección de Acordes
+```java
+Pattern CHORD_PATTERN = Pattern.compile(
+    "\\b([A-G][b#]?(m|maj|dim|aug|sus)?[0-9]?[7]?(?![a-zA-Z]))\\b"
+);
+```
+
+#### 3. Emparejamiento de Líneas
+- **Línea de acordes + Línea de letra**: Se combinan en una sola entrada
+- **Línea de acordes sola**: Se crea entrada con acordes pero sin letra
+- **Línea de letra sola**: Se crea entrada con letra pero sin acordes
+
+### Flujo de Trabajo
+
+#### 1. Recepción de Texto
+```
+Usuario → SongController.importSong() → SongImportService.parse()
+```
+
+#### 2. Procesamiento
+```
+Raw Text → Análisis de líneas → Detección de acordes → Validación → JSON estructurado
+```
+
+#### 3. Validación
+```
+Acordes detectados → ChordCatalogRepository → Validación contra catálogo → IDs asignados
+```
+
+### Formatos Soportados
+
+#### Formato Estándar
+```
+Título - Artista
+
+[Sección]
+C        Am        F         G
+Letra de la canción con acordes arriba
+```
+
+#### Formato con Múltiples Secciones
+```
+Bohemian Rhapsody - Queen
+
+[Verse 1]
+C        Am        F         G
+Is this the real life? Is this just fantasy?
+
+[Chorus]
+F        C         Dm        G
+Mama, just killed a man
+```
+
+### Validaciones y Limitaciones
+
+#### ✅ Validaciones Implementadas
+- **Formato de acordes**: Solo acordes válidos del catálogo
+- **Estructura**: Detección automática de título/artista
+- **Posicionamiento**: Cálculo correcto de posiciones de acordes
+
+#### ⚠️ Limitaciones Actuales
+- **Tablaturas**: No se procesan (se ignoran)
+- **Acordes complejos**: Algunos acordes muy específicos pueden no detectarse
+- **Formato rígido**: Requiere formato relativamente estándar
+
+### Endpoint de Importación
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST` | `/api/songs/import` | Importar canción desde texto plano |
+
+**Request:** Texto plano con formato de canción
+**Response:** `SongWithChordsRequest` estructurado
+
+---
+
+## 📚 Sistema de Playlists
+
+El sistema de playlists permite a los usuarios organizar sus canciones en bibliotecas personalizadas, facilitando la gestión y acceso a su música favorita.
+
+### Arquitectura del Sistema de Playlists
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SISTEMA DE PLAYLISTS                        │
+│                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐        │
+│  │   Playlist  │    │ PlaylistSong│    │    Song     │        │
+│  │   Entity    │◄──►│   Entity    │◄──►│   Entity    │        │
+│  │             │    │ (Join Table)│    │             │        │
+│  └─────────────┘    └─────────────┘    └─────────────┘        │
+│         │                                                      │
+│         ▼                                                      │
+│  ┌─────────────┐                                              │
+│  │    User     │                                              │
+│  │   Entity    │                                              │
+│  └─────────────┘                                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Características del Sistema
+
+#### 🏷️ Playlists por Defecto
+Cada usuario recibe automáticamente dos playlists al registrarse:
+- **"Favoritas"**: Para marcar canciones como favoritas
+- **"Mis Creaciones"**: Para organizar canciones creadas por el usuario
+
+#### 🎵 Gestión de Canciones
+- **Añadir canciones**: Los usuarios pueden añadir cualquier canción pública o sus propias creaciones
+- **Eliminar canciones**: Remover canciones de playlists personalizadas
+- **Orden cronológico**: Las canciones se mantienen en orden de adición
+
+#### 🌐 Visibilidad
+- **Playlists privadas**: Solo visibles para el propietario
+- **Playlists públicas**: Visibles para otros usuarios para exploración
+- **Búsqueda**: Los usuarios pueden buscar playlists públicas por nombre
+
+### Flujo de Trabajo
+
+#### 1. Creación de Playlist
+```
+Usuario → PlaylistController → PlaylistService → PlaylistRepository → Base de Datos
+```
+
+#### 2. Añadir Canción a Playlist
+```
+Usuario → PlaylistController → PlaylistService → Validaciones → PlaylistSongRepository → Base de Datos
+```
+
+#### 3. Gestión de Playlists por Defecto
+```
+Registro de Usuario → AuthService → PlaylistService.createDefaultPlaylistsForUser() → Base de Datos
+```
+
+### Validaciones de Negocio
+
+#### ✅ Reglas de Validación
+- **Propiedad**: Solo el propietario puede modificar sus playlists
+- **Canciones existentes**: No se pueden añadir canciones duplicadas
+- **Playlists por defecto**: No se pueden eliminar las playlists "Favoritas" y "Mis Creaciones"
+- **Canciones públicas**: Solo se pueden añadir canciones públicas o propias
+
+#### 🔒 Seguridad
+- **Autenticación**: Todos los endpoints requieren JWT válido
+- **Autorización**: Los usuarios solo pueden acceder a sus propias playlists (excepto públicas)
+- **Validación de datos**: Sanitización de nombres y descripciones
+
+### Endpoints Principales
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST` | `/api/playlists` | Crear nueva playlist |
+| `GET` | `/api/playlists/my` | Obtener mis playlists |
+| `GET` | `/api/playlists/{id}` | Obtener playlist específica |
+| `PUT` | `/api/playlists/{id}` | Actualizar playlist |
+| `DELETE` | `/api/playlists/{id}` | Eliminar playlist |
+| `POST` | `/api/playlists/{id}/songs` | Añadir canción |
+| `DELETE` | `/api/playlists/{id}/songs/{songId}` | Eliminar canción |
+| `GET` | `/api/playlists/public` | Obtener playlists públicas |
+| `GET` | `/api/playlists/search?q=query` | Buscar playlists públicas |
+
+---
+
 ## 🗄️ Base de Datos
 
 ### Diagrama ER
 
 ```
 ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-│    User     │         │    Song     │         │ SongChord   │
+│    User     │         │    Song     │         │  Playlist   │
 │─────────────│         │─────────────│         │─────────────│
 │ id (PK)     │◄────────┤ created_by  │         │ id (PK)     │
-│ username    │         │ id (PK)     │◄────────┤ song_id     │
-│ password    │         │ title       │         │ chord_id    │
-│ firstname   │         │ artist      │         │ position_   │
-│ lastname    │         │ album       │         │   start     │
-│ country     │         │ year        │         │ position_   │
-│ role        │         │ lyrics_data │         │   end       │
-│             │         │ status      │         │ line_number │
-│             │         │ is_public   │         │ chord_name  │
-│             │         │ rejection_  │         │ created_at  │
-│             │         │   reason    │         │             │
-│             │         │ created_at  │         │             │
-│             │         │ updated_at  │         │             │
-│             │         │ published_  │         │             │
-│             │         │   at        │         │             │
+│ username    │         │ id (PK)     │         │ name        │
+│ password    │         │ title       │         │ user_id     │◄──┐
+│ firstname   │         │ artist      │         │ description │   │
+│ lastname    │         │ album       │         │ is_public   │   │
+│ country     │         │ year        │         │ is_default  │   │
+│ role        │         │ lyrics_data │         │ created_at  │   │
+│             │         │ chords_map  │         │ updated_at  │   │
+│             │         │ status      │         │             │   │
+│             │         │ is_public   │         │             │   │
+│             │         │ rejection_  │         │             │   │
+│             │         │   reason    │         │             │   │
+│             │         │ created_at  │         │             │   │
+│             │         │ updated_at  │         │             │   │
+│             │         │ published_  │         │             │   │
+│             │         │   at        │         │             │   │
 └─────────────┘         └─────────────┘         └─────────────┘
                                                          │
                                                          │
                                                 ┌─────────────┐
-                                                │ChordCatalog │
+                                                │PlaylistSong │
                                                 │─────────────│
                                                 │ id (PK)     │
-                                                │ name        │
-                                                │ full_name   │
-                                                │ category    │
-                                                │ difficulty_ │
-                                                │   level     │
-                                                │ is_common   │
-                                                │ display_    │
-                                                │   order     │
-                                                │ finger_     │
-                                                │   positions │
-                                                │ notes       │
-                                                └─────────────┘
+                                                │ playlist_id │◄──┘
+                                                │ song_id     │◄────┐
+                                                │ added_at    │     │
+                                                │             │     │
+                                                └─────────────┘     │
+                                                         │         │
+                                                         │         │
+                                                ┌─────────────┐     │
+                                                │ChordCatalog │     │
+                                                │─────────────│     │
+                                                │ id (PK)     │     │
+                                                │ name        │     │
+                                                │ full_name   │     │
+                                                │ category    │     │
+                                                │ difficulty_ │     │
+                                                │   level     │     │
+                                                │ is_common   │     │
+                                                │ display_    │     │
+                                                │   order     │     │
+                                                │ finger_     │     │
+                                                │   positions │     │
+                                                │ notes       │     │
+                                                └─────────────┘     │
+                                                         │         │
+                                                         └─────────┘
 ```
 
 ### Relaciones
@@ -580,6 +827,262 @@ COPY target/application.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 ```
+
+---
+
+## 📄 Sistema de Paginación
+
+### Visión General
+
+El sistema de paginación de ReChords está implementado para optimizar el rendimiento y la experiencia del usuario al manejar grandes cantidades de datos. Todos los endpoints de listado utilizan paginación para evitar sobrecargar el cliente y el servidor.
+
+### Implementación Técnica
+
+#### 1. **PageResponse DTO**
+```java
+@Data
+@Builder
+public class PageResponse<T> {
+    private List<T> content;
+    private long totalElements;
+    private int totalPages;
+    private int size;
+    private int number;
+    private boolean first;
+    private boolean last;
+    private int numberOfElements;
+    
+    public static <T> PageResponse<T> from(Page<T> page) {
+        return PageResponse.<T>builder()
+            .content(page.getContent())
+            .totalElements(page.getTotalElements())
+            .totalPages(page.getTotalPages())
+            .size(page.getSize())
+            .number(page.getNumber())
+            .first(page.isFirst())
+            .last(page.isLast())
+            .numberOfElements(page.getNumberOfElements())
+            .build();
+    }
+}
+```
+
+#### 2. **Repository Layer**
+```java
+@Repository
+public interface SongRepository extends JpaRepository<Song, Long> {
+    // Métodos paginados
+    Page<Song> findByCreatedById(Long userId, Pageable pageable);
+    Page<Song> findByIsPublicTrueAndStatus(SongStatus status, Pageable pageable);
+    Page<Song> findByStatus(SongStatus status, Pageable pageable);
+    Page<Song> findByIsPublicTrueAndStatusAndTitleContainingIgnoreCaseOrArtistContainingIgnoreCase(
+        SongStatus status, String title, String artist, Pageable pageable);
+    Page<Song> findAll(Pageable pageable);
+}
+```
+
+#### 3. **Service Layer**
+```java
+@Service
+public class SongService extends BaseService {
+    
+    public PageResponse<SongWithChordsResponse> getMySongsWithChordsPaginated(Pageable pageable) {
+        User currentUser = getCurrentUser();
+        Page<Song> songsPage = songRepository.findByCreatedById(currentUser.getId(), pageable);
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+        return PageResponse.from(responsePage);
+    }
+    
+    public PageResponse<SongWithChordsResponse> getPublicSongsWithChordsPaginated(Pageable pageable) {
+        Page<Song> songsPage = songRepository.findByIsPublicTrueAndStatus(SongStatus.APPROVED, pageable);
+        Page<SongWithChordsResponse> responsePage = songsPage.map(this::mapToSongWithChordsResponse);
+        return PageResponse.from(responsePage);
+    }
+}
+```
+
+#### 4. **Controller Layer**
+```java
+@RestController
+@RequestMapping("/api/songs")
+public class songController {
+    
+    @GetMapping("/my")
+    public ResponseEntity<PageResponse<SongWithChordsResponse>> getMySongsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+        
+        Pageable pageable = createPageable(page, size, sort);
+        PageResponse<SongWithChordsResponse> response = songService.getMySongsWithChordsPaginated(pageable);
+        return ResponseEntity.ok(response);
+    }
+    
+    private Pageable createPageable(int page, int size, String[] sort) {
+        // Validación de límites
+        if (size > 20) size = 20;
+        if (size < 1) size = 1;
+        
+        // Configuración de ordenamiento
+        Sort.Direction direction = Sort.Direction.DESC;
+        String property = "createdAt";
+        
+        if (sort.length > 0) {
+            property = sort[0];
+            if (sort.length > 1) {
+                direction = Sort.Direction.fromString(sort[1]);
+            }
+        }
+        
+        return PageRequest.of(page, size, Sort.by(direction, property));
+    }
+}
+```
+
+### Parámetros de Paginación
+
+#### Query Parameters
+- **`page`** (opcional): Número de página (0-based, default: 0)
+- **`size`** (opcional): Tamaño de página (default: 20, máximo: 20)
+- **`sort`** (opcional): Campo y dirección de ordenamiento (default: "createdAt,desc")
+
+#### Ejemplos de Uso
+```http
+# Primera página con 10 elementos
+GET /api/songs/my?page=0&size=10
+
+# Segunda página ordenada por título ascendente
+GET /api/songs/public?page=1&size=20&sort=title,asc
+
+# Búsqueda paginada
+GET /api/songs/search?q=rock&page=0&size=15&sort=publishedAt,desc
+```
+
+### Endpoints con Paginación
+
+#### Usuario
+- `GET /songs/my` - Mis canciones
+- `GET /songs/public` - Canciones públicas
+- `GET /songs/search` - Búsqueda de canciones
+
+#### Administración
+- `GET /admin/songs/pending` - Canciones pendientes
+- `GET /admin/songs` - Todas las canciones
+
+### Beneficios de la Paginación
+
+#### 1. **Rendimiento**
+- Reduce la carga en la base de datos
+- Minimiza el uso de memoria
+- Mejora los tiempos de respuesta
+
+#### 2. **Experiencia de Usuario**
+- Carga más rápida de listas
+- Navegación intuitiva
+- Control del tamaño de página
+
+#### 3. **Escalabilidad**
+- Manejo eficiente de grandes volúmenes
+- Preparado para crecimiento
+- Optimización de recursos
+
+### Consideraciones de Implementación
+
+#### 1. **Límites de Seguridad**
+```java
+// Validación de límites en el controlador
+if (size > 20) size = 20;  // Máximo 20 elementos por página
+if (size < 1) size = 1;    // Mínimo 1 elemento por página
+```
+
+#### 2. **Ordenamiento por Defecto**
+```java
+// Ordenamiento por defecto para cada endpoint
+private String getDefaultSort(String endpoint) {
+    switch (endpoint) {
+        case "my": return "createdAt,desc";
+        case "public": return "publishedAt,desc";
+        case "search": return "title,asc";
+        default: return "createdAt,desc";
+    }
+}
+```
+
+#### 3. **Manejo de Errores**
+```java
+@ExceptionHandler(IllegalArgumentException.class)
+public ResponseEntity<ErrorResponse> handlePaginationError(IllegalArgumentException e) {
+    return ResponseEntity.badRequest()
+        .body(ErrorResponse.builder()
+            .error("INVALID_PAGINATION")
+            .message("Parámetros de paginación inválidos")
+            .build());
+}
+```
+
+### Testing de Paginación
+
+#### Tests Unitarios
+```java
+@Test
+void getMySongsWithChordsPaginated_ShouldReturnPaginatedResponse() {
+    // Arrange
+    List<Song> songs = Arrays.asList(testSong);
+    Page<Song> songPage = new PageImpl<>(songs);
+    Pageable pageable = PageRequest.of(0, 10);
+    when(songRepository.findByCreatedById(1L, pageable)).thenReturn(songPage);
+
+    // Act
+    PageResponse<SongWithChordsResponse> response = songService.getMySongsWithChordsPaginated(pageable);
+
+    // Assert
+    assertNotNull(response);
+    assertEquals(1, response.getContent().size());
+    assertEquals(1, response.getTotalElements());
+    assertEquals(1, response.getTotalPages());
+    verify(songRepository).findByCreatedById(1L, pageable);
+}
+```
+
+#### Tests de Integración
+```java
+@Test
+void getMySongsPaginated_ShouldReturnPaginatedResponse() {
+    // Arrange
+    createTestSongs(25); // Crear 25 canciones de prueba
+
+    // Act
+    ResponseEntity<PageResponse<SongWithChordsResponse>> response = 
+        restTemplate.getForEntity("/api/songs/my?page=0&size=10", 
+            new ParameterizedTypeReference<PageResponse<SongWithChordsResponse>>() {});
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    PageResponse<SongWithChordsResponse> pageResponse = response.getBody();
+    assertEquals(10, pageResponse.getContent().size());
+    assertEquals(25, pageResponse.getTotalElements());
+    assertEquals(3, pageResponse.getTotalPages());
+    assertTrue(pageResponse.isFirst());
+    assertFalse(pageResponse.isLast());
+}
+```
+
+### Métricas y Monitoreo
+
+#### 1. **Métricas de Rendimiento**
+- Tiempo de respuesta por página
+- Uso de memoria por consulta
+- Throughput de requests paginados
+
+#### 2. **Métricas de Uso**
+- Tamaño de página más común
+- Patrones de navegación
+- Frecuencia de uso de ordenamiento
+
+#### 3. **Alertas**
+- Tiempo de respuesta > 500ms
+- Uso de memoria > 100MB
+- Error rate > 1%
 
 ---
 

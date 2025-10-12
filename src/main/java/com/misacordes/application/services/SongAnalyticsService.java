@@ -17,11 +17,14 @@ import java.util.stream.Collectors;
 @Service("songAnalyticsService")
 @RequiredArgsConstructor
 @Slf4j
-public class SongAnalyticsService {
+public class SongAnalyticsService extends BaseService {
 
     private final ObjectMapper objectMapper;
 
     public SongAnalyticsResponse analyzeSongChords(Song song) {
+        // Verificar que el usuario esté autenticado
+        verifyAuthenticated();
+        
         try {
             if (song.getChordsMap() == null || song.getChordsMap().trim().isEmpty()) {
                 return createEmptyAnalytics(song);
@@ -117,6 +120,9 @@ public class SongAnalyticsService {
     }
 
     public boolean validateChordsMap(String chordsMapJson) {
+        // Verificar que el usuario esté autenticado
+        verifyAuthenticated();
+        
         try {
             if (chordsMapJson == null || chordsMapJson.trim().isEmpty()) {
                 return false;
@@ -141,6 +147,9 @@ public class SongAnalyticsService {
     }
 
     public Set<String> extractUniqueChords(Song song) {
+        // Verificar que el usuario esté autenticado
+        verifyAuthenticated();
+        
         try {
             if (song.getChordsMap() == null || song.getChordsMap().trim().isEmpty()) {
                 return Collections.emptySet();

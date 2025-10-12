@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service("songAnalyticsAsyncService")
 @RequiredArgsConstructor
 @Slf4j
-public class SongAnalyticsAsyncService {
+public class SongAnalyticsAsyncService extends BaseService {
 
     private final SongAnalyticsService songAnalyticsService;
     private final SongRepository songRepository;
@@ -22,6 +22,9 @@ public class SongAnalyticsAsyncService {
      */
     @Async("songAnalyticsExecutor")
     public void processSongAnalyticsAsync(Long songId) {
+        // Verificar que el usuario esté autenticado
+        verifyAuthenticated();
+        
         try {
             log.info("Iniciando procesamiento asíncrono de analítica para canción ID: {}", songId);
             
@@ -84,6 +87,9 @@ public class SongAnalyticsAsyncService {
      */
     @Async("songAnalyticsExecutor")
     public void processMultipleSongsAnalyticsAsync() {
+        // Verificar que el usuario tenga permisos de administrador
+        verifyAdmin();
+        
         try {
             log.info("Iniciando procesamiento masivo de analítica");
             
