@@ -16,6 +16,8 @@ import com.misacordes.application.repositories.SongRepository;
 import com.misacordes.application.repositories.UserRepository;
 import com.misacordes.application.utils.ChordTransposer;
 import com.misacordes.application.utils.SongStatus;
+import com.misacordes.application.config.GlobalExceptionHandler.ResourceNotFoundException;
+import com.misacordes.application.config.GlobalExceptionHandler.BusinessException;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +44,10 @@ public class SongService extends BaseService {
     public SongWithChordsResponse submitForApprovalWithChords(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         if (song.getStatus() != SongStatus.DRAFT && song.getStatus() != SongStatus.REJECTED) {
-            throw new RuntimeException("Solo puedes enviar canciones en borrador o rechazadas");
+            throw new BusinessException("Solo puedes enviar canciones en borrador o rechazadas");
         }
         song.setStatus(SongStatus.PENDING);
         song.setRejectionReason(null);
@@ -59,10 +61,10 @@ public class SongService extends BaseService {
     public SongWithChordsResponse approveSong(Long id) {
         verifyAdmin();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         if (song.getStatus() != SongStatus.PENDING) {
-            throw new RuntimeException("Solo puedes aprobar canciones pendientes");
+            throw new BusinessException("Solo puedes aprobar canciones pendientes");
         }
 
         song.setStatus(SongStatus.APPROVED);
@@ -76,10 +78,10 @@ public class SongService extends BaseService {
     public SongWithChordsResponse rejectSong(Long id, String reason) {
         verifyAdmin();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         if (song.getStatus() != SongStatus.PENDING) {
-            throw new RuntimeException("Solo puedes rechazar canciones pendientes");
+            throw new BusinessException("Solo puedes rechazar canciones pendientes");
         }
 
         song.setStatus(SongStatus.REJECTED);
@@ -104,10 +106,10 @@ public class SongService extends BaseService {
     public void deleteSong(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         if (song.getStatus() != SongStatus.DRAFT) {
-            throw new RuntimeException("Solo puedes eliminar canciones en borrador");
+            throw new BusinessException("Solo puedes eliminar canciones en borrador");
         }
 
         songRepository.delete(song);
@@ -117,10 +119,10 @@ public class SongService extends BaseService {
     public SongWithChordsResponse unpublishSong(Long id) {
         verifyAdmin();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         if (song.getStatus() != SongStatus.APPROVED) {
-            throw new RuntimeException("Solo puedes despublicar canciones aprobadas");
+            throw new BusinessException("Solo puedes despublicar canciones aprobadas");
         }
 
         song.setStatus(SongStatus.DRAFT);
@@ -134,7 +136,7 @@ public class SongService extends BaseService {
     public void deleteSongAdmin(Long id) {
         verifyAdmin();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
         songRepository.delete(song);
     }
@@ -156,7 +158,7 @@ public class SongService extends BaseService {
         User currentUser = getCurrentUser();
 
         if (!songAnalyticsService.validateChordsMap(convertToJson(request))) {
-            throw new RuntimeException("Formato de acordes inválido");
+            throw new BusinessException("Formato de acordes inválido");
         }
         
         Song song = Song.builder()
@@ -180,10 +182,10 @@ public class SongService extends BaseService {
     public SongWithChordsResponse getSongWithChordsById(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Song not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
 
         if (!canUserViewSong(currentUser, song)) {
-            throw new RuntimeException("No tienes permiso para ver esta canción");
+            throw new BusinessException("No tienes permiso para ver esta canción");
         }
         
         return mapToSongWithChordsResponse(song);
@@ -192,14 +194,14 @@ public class SongService extends BaseService {
     public SongWithChordsResponse updateSongWithChords(Long id, SongWithChordsRequest request) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
         
         if (song.getStatus() != SongStatus.DRAFT && song.getStatus() != SongStatus.REJECTED) {
-            throw new RuntimeException("No puedes editar una canción en estado " + song.getStatus());
+            throw new BusinessException("No puedes editar una canción en estado " + song.getStatus());
         }
 
         if (!songAnalyticsService.validateChordsMap(convertToJson(request))) {
-            throw new RuntimeException("Formato de acordes inválido");
+            throw new BusinessException("Formato de acordes inválido");
         }
 
         song.setTitle(request.getTitle());
@@ -221,10 +223,10 @@ public class SongService extends BaseService {
     public com.misacordes.application.dto.response.SongAnalyticsResponse getSongAnalytics(Long id) {
         User currentUser = getCurrentUser();
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Song not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
 
         if (!canUserViewSong(currentUser, song)) {
-            throw new RuntimeException("No tienes permiso para ver esta canción");
+            throw new BusinessException("No tienes permiso para ver esta canción");
         }
         
         return songAnalyticsService.analyzeSongChords(song);
@@ -234,7 +236,7 @@ public class SongService extends BaseService {
         try {
             return objectMapper.writeValueAsString(request);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting request to JSON", e);
+            throw new BusinessException("Error converting request to JSON: " + e.getMessage());
         }
     }
 
@@ -314,7 +316,7 @@ public class SongService extends BaseService {
                         .build())
                     .build();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error parsing song chords map", e);
+            throw new BusinessException("Error parsing song chords map: " + e.getMessage());
         }
     }
 
@@ -353,4 +355,5 @@ public class SongService extends BaseService {
 
         return response;
     }
+
 }

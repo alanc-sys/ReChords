@@ -3,10 +3,14 @@ package com.misacordes.application.controller;
 
 import com.misacordes.application.dto.request.RejectSongRequest;
 import com.misacordes.application.dto.response.AdminStatsResponse;
+import com.misacordes.application.dto.response.PageResponse;
 import com.misacordes.application.dto.response.SongWithChordsResponse;
 import com.misacordes.application.services.SongService;
 import com.misacordes.application.services.SongAnalyticsAsyncService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,30 +21,11 @@ import java.util.List;
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
-public class adminController {
+public class AdminController {
 
     private final SongService songService;
     private final SongAnalyticsAsyncService songAnalyticsAsyncService;
 
-    @GetMapping("/songs/pending")
-    public ResponseEntity<List<SongWithChordsResponse>> getPendingSongs() {
-        try {
-            List<SongWithChordsResponse> songs = songService.getPendingSongs();
-            return ResponseEntity.ok(songs);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to obtain Songs: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/songs")
-    public ResponseEntity<List<SongWithChordsResponse>> getAllSongs() {
-        try {
-            List<SongWithChordsResponse> songs = songService.getAllSongsAdmin();
-            return ResponseEntity.ok(songs);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to obtain Songs: " + e.getMessage());
-        }
-    }
 
     @PutMapping("/songs/{id}/approve")
     public ResponseEntity<SongWithChordsResponse> approveSong(@PathVariable Long id) {
@@ -86,10 +71,6 @@ public class adminController {
         return ResponseEntity.ok(stats);
     }
 
-    /**
-     * POST /api/admin/analytics/process-all
-     * Procesar analítica de todas las canciones de forma asíncrona (solo admin)
-     */
     @PostMapping("/analytics/process-all")
     public ResponseEntity<String> processAllSongsAnalytics() {
         try {
@@ -98,5 +79,50 @@ public class adminController {
         } catch (Exception e) {
             throw new RuntimeException("Error al iniciar procesamiento masivo: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/songs/pending")
+    public ResponseEntity<PageResponse<SongWithChordsResponse>> getPendingSongsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+        try {
+            Pageable pageable = createPageable(page, size, sort);
+            PageResponse<SongWithChordsResponse> response = songService.getPendingSongsPaginated(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to obtain pending songs: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/songs")
+    public ResponseEntity<PageResponse<SongWithChordsResponse>> getAllSongsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+        try {
+            Pageable pageable = createPageable(page, size, sort);
+            PageResponse<SongWithChordsResponse> response = songService.getAllSongsAdminPaginated(pageable);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to obtain songs: " + e.getMessage());
+        }
+    }
+
+    private Pageable createPageable(int page, int size, String[] sort) {
+        if (size > 100) size = 100;
+        if (size < 1) size = 20;
+
+        Sort.Direction direction = Sort.Direction.DESC;
+        String property = "createdAt";
+
+        if (sort.length > 0) {
+            property = sort[0];
+            if (sort.length > 1) {
+                direction = Sort.Direction.fromString(sort[1]);
+            }
+        }
+
+        return PageRequest.of(page, size, Sort.by(direction, property));
     }
 }

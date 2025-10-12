@@ -22,31 +22,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/songs")
 @RequiredArgsConstructor
-public class songController {
+public class SongController {
     private final SongService songService;
     private final ChordService chordService;
     private final SongImportService songImportService;
 
     @PostMapping
     public ResponseEntity<SongWithChordsResponse> createSong(@RequestBody SongWithChordsRequest request){
-        try {
-            SongWithChordsResponse response = songService.createSongWithChords(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create the song: " + e.getMessage());
-        }
+        SongWithChordsResponse response = songService.createSongWithChords(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SongWithChordsResponse> updateSong(
             @PathVariable long id,
             @RequestBody SongWithChordsRequest request){
-        try {
-            SongWithChordsResponse response = songService.updateSongWithChords(id, request);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update song: " + e.getMessage());
-        }
+        SongWithChordsResponse response = songService.updateSongWithChords(id, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -65,63 +57,39 @@ public class songController {
 
     @PutMapping("/{id}/submit")
     public ResponseEntity<SongWithChordsResponse> submitForApproval(@PathVariable Long id) {
-        try {
-            SongWithChordsResponse response = songService.submitForApprovalWithChords(id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al enviar canción: " + e.getMessage());
-        }
+        SongWithChordsResponse response = songService.submitForApprovalWithChords(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/available-chords")
     public ResponseEntity<List<ChordInfo>> getAvailableChords() {
-        try {
-            List<ChordInfo> chords = chordService.getAllChordsForSelection();
-            return ResponseEntity.ok(chords);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener acordes: " + e.getMessage());
-        }
+        List<ChordInfo> chords = chordService.getAllChordsForSelection();
+        return ResponseEntity.ok(chords);
     }
 
     @GetMapping("/common-chords")
     public ResponseEntity<List<ChordInfo>> getCommonChords() {
-        try {
-            List<ChordInfo> chords = chordService.getCommonChordsForSelection();
-            return ResponseEntity.ok(chords);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener acordes comunes: " + e.getMessage());
-        }
+        List<ChordInfo> chords = chordService.getCommonChordsForSelection();
+        return ResponseEntity.ok(chords);
     }
 
     @GetMapping("/{id}/analytics")
     public ResponseEntity<SongAnalyticsResponse> getSongAnalytics(@PathVariable Long id) {
-        try {
-            SongAnalyticsResponse response = songService.getSongAnalytics(id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener analítica de la canción: " + e.getMessage());
-        }
+        SongAnalyticsResponse response = songService.getSongAnalytics(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/import")
     public ResponseEntity<SongWithChordsRequest> importSong(@RequestBody String rawText) {
-        try {
-            SongWithChordsRequest parsedRequest = songImportService.parse(rawText);
-            return ResponseEntity.ok(parsedRequest);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to import song: " + e.getMessage());
-        }
+        SongWithChordsRequest parsedRequest = songImportService.parse(rawText);
+        return ResponseEntity.ok(parsedRequest);
     }
     @GetMapping("/{id}/transpose")
     public ResponseEntity<SongWithChordsResponse> transposeSong(
             @PathVariable Long id,
             @RequestParam int semitones) {
-        try {
-            SongWithChordsResponse response = songService.transposeSong(id, semitones);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to transpose chords: " + e);
-        }
+        SongWithChordsResponse response = songService.transposeSong(id, semitones);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/my")
@@ -129,13 +97,9 @@ public class songController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
-        try {
-            Pageable pageable = createPageable(page, size, sort);
-            PageResponse<SongWithChordsResponse> response = songService.getMySongsWithChordsPaginated(pageable);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get songs: " + e.getMessage());
-        }
+        Pageable pageable = createPageable(page, size, sort);
+        PageResponse<SongWithChordsResponse> response = songService.getMySongsWithChordsPaginated(pageable);
+        return ResponseEntity.ok(response);
     }
 
         @GetMapping("/public")
@@ -143,13 +107,9 @@ public class songController {
                 @RequestParam(defaultValue = "0") int page,
                 @RequestParam(defaultValue = "20") int size,
                 @RequestParam(defaultValue = "publishedAt,desc") String[] sort) {
-            try {
-                Pageable pageable = createPageable(page, size, sort);
-                PageResponse<SongWithChordsResponse> response = songService.getPublicSongsWithChordsPaginated(pageable);
-                return ResponseEntity.ok(response);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to get public songs: " + e.getMessage());
-            }
+            Pageable pageable = createPageable(page, size, sort);
+            PageResponse<SongWithChordsResponse> response = songService.getPublicSongsWithChordsPaginated(pageable);
+            return ResponseEntity.ok(response);
         }
 
         @GetMapping("/search")
@@ -158,13 +118,9 @@ public class songController {
                 @RequestParam(defaultValue = "0") int page,
                 @RequestParam(defaultValue = "20") int size,
                 @RequestParam(defaultValue = "title,asc") String[] sort) {
-            try {
-                Pageable pageable = createPageable(page, size, sort);
-                PageResponse<SongWithChordsResponse> response = songService.searchPublicSongsWithChordsPaginated(q, pageable);
-                return ResponseEntity.ok(response);
-            } catch (Exception e) {
-                throw new RuntimeException("Error al buscar canciones: " + e.getMessage());
-            }
+            Pageable pageable = createPageable(page, size, sort);
+            PageResponse<SongWithChordsResponse> response = songService.searchPublicSongsWithChordsPaginated(q, pageable);
+            return ResponseEntity.ok(response);
         }
 
     private Pageable createPageable(int page, int size, String[] sort) {

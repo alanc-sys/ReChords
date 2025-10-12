@@ -19,41 +19,6 @@ public class ChordService extends BaseService {
 
     private final ChordCatalogRepository chordCatalogRepository;
 
-    // ========== CONSULTAS PÚBLICAS ==========
-
-    public List<ChordResponse> getAllChords() {
-        List<ChordCatalog> chords = chordCatalogRepository.findAllByOrderByDisplayOrderAsc();
-        return chords.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<ChordResponse> getCommonChords() {
-        List<ChordCatalog> chords = chordCatalogRepository.findByIsCommonTrueOrderByDisplayOrderAsc();
-        return chords.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<ChordResponse> getChordsByCategory(ChordCategory category) {
-        List<ChordCatalog> chords = chordCatalogRepository.findByCategoryOrderByDisplayOrderAsc(category);
-        return chords.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    public List<ChordResponse> getChordsByDifficulty(DifficultyLevel level) {
-        List<ChordCatalog> chords = chordCatalogRepository.findByDifficultyLevelOrderByDisplayOrderAsc(level);
-        return chords.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-    }
-
-    public ChordResponse getChordById(Long id) {
-        ChordCatalog chord = chordCatalogRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Acorde no encontrado"));
-        return mapToResponse(chord);
-    }
 
     // ========== GESTIÓN ADMIN ==========
 
