@@ -38,7 +38,13 @@ http://localhost:8080/api
 
 ## 🔐 Autenticación
 
-Todos los endpoints (excepto login y registro) requieren autenticación JWT.
+Todos los endpoints (excepto los públicos) requieren autenticación JWT.
+
+### Endpoints públicos (sin JWT):
+- `GET /api/songs/available-chords`
+- `GET /api/songs/common-chords`
+- `GET /api/uploads/**`
+- `POST /api/auth/login`, `POST /api/auth/register`
 
 ### Headers Requeridos:
 ```http
@@ -50,7 +56,7 @@ Content-Type: application/json
 
 #### 🔑 Login
 ```http
-POST /auth/login
+POST /api/auth/login
 ```
 
 **Request Body:**
@@ -70,7 +76,7 @@ POST /auth/login
 
 #### 📝 Registro
 ```http
-POST /auth/register
+POST /api/auth/register
 ```
 
 **Request Body:**
@@ -337,6 +343,96 @@ PUT /songs/{id}/submit
 
 **Response (200):** Canción con status PENDING
 
+### 📊 Obtener Analytics de Canción
+```http
+GET /songs/{id}/analytics
+```
+
+**Descripción:** Obtiene estadísticas y análisis detallados de una canción específica.
+
+**Response (200):**
+```json
+{
+  "songId": 1,
+  "totalChords": 12,
+  "uniqueChords": 5,
+  "difficulty": "INTERMEDIATE",
+  "averageChordDensity": 2.4,
+  "mostUsedChords": [
+    {
+      "chordName": "C",
+      "count": 4
+    },
+    {
+      "chordName": "Am",
+      "count": 3
+    }
+  ]
+}
+```
+
+### 🎵 Transponer Canción
+```http
+GET /songs/{id}/transpose?semitones={value}
+```
+
+**Descripción:** Transpone todos los acordes de una canción X semitonos hacia arriba (positivo) o abajo (negativo).
+
+**Parámetros de Query:**
+- `semitones` (requerido): Número de semitonos a transponer (-12 a 12)
+
+**Ejemplo:**
+```http
+GET /songs/1/transpose?semitones=2
+```
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "title": "Mi Canción",
+  "artist": "Mi Artista",
+  "key": "D",
+  "lyrics": [
+    {
+      "lineNumber": 0,
+      "text": "Letra de la canción...",
+      "chords": [
+        {
+          "start": 0,
+          "name": "D",
+          "chordId": 2
+        },
+        {
+          "start": 10,
+          "name": "Bm",
+          "chordId": 14
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 🖼️ Subir/Quitar Portada de Canción
+
+Sube o elimina la imagen de portada de una canción.
+
+```http
+POST /songs/{id}/cover
+DELETE /songs/{id}/cover
+```
+
+Notas:
+- Tamaño máximo 5MB; debe ser imagen (image/*).
+- En caso de éxito al subir, responde con la URL pública de la portada: `/api/uploads/covers/{filename}`.
+
+**Nota:** Los acordes se transponen automáticamente. Por ejemplo, si transponemos 2 semitonos:
+- C → D
+- Am → Bm
+- F → G
+- G → A
+
 ---
 
 ## 🎸 Endpoints de Acordes
@@ -377,30 +473,34 @@ GET /songs/common-chords
 
 **Response (200):** Solo acordes marcados como comunes
 
+Nota: Estos dos endpoints son públicos (no requieren JWT).
+
 ### 🎵 Actualizar Posiciones de Acordes
+
+Las posiciones de acordes se actualizan como parte de la actualización de la canción:
+
 ```http
-PUT /songs/{id}/chords
+PUT /songs/{id}
 ```
 
-**Request Body:**
+Incluye las líneas y sus acordes en `lyrics` usando `LineWithChords` y `ChordPositionInfo`.
+
+**Ejemplo de Request Body (parcial):**
 ```json
-[
-  {
-    "chordName": "C",
-    "startPos": 0,
-    "endPos": 1,
-    "lineNumber": 0
-  },
-  {
-    "chordName": "F",
-    "startPos": 5,
-    "endPos": 6,
-    "lineNumber": 1
-  }
-]
+{
+  "title": "Mi canción",
+  "lyrics": [
+    {
+      "lineNumber": 0,
+      "text": "Letra...",
+      "chords": [
+        { "start": 0, "name": "C", "chordId": 1 },
+        { "start": 10, "name": "G", "chordId": 4 }
+      ]
+    }
+  ]
+}
 ```
-
-**Response (200):** Canción con acordes actualizados
 
 ---
 
@@ -480,16 +580,9 @@ GET /playlists/{id}
   "isDefault": true,
   "createdAt": "2024-01-15T10:30:00",
   "updatedAt": "2024-01-15T10:30:00",
-  "songs": [
-    {
-      "id": 1,
-      "title": "Bohemian Rhapsody",
-      "artist": "Queen",
-      "genre": "Rock",
-      "isPublic": true,
-      "addedAt": "2024-01-15T10:35:00"
-    }
-  ]
+  "songCount": 5,
+  "songs": [SongWithChordsResponse],
+  "createdBy": { "id": 9, "username": "ana", "firstname": "Ana" }
 }
 ```
 
@@ -633,26 +726,39 @@ GET /admin/stats
 }
 ```
 
+### 🔄 Procesar Analytics Masivamente
+```http
+POST /admin/analytics/process-all
+```
+
+**Descripción:** Procesa la analítica de todas las canciones del sistema de forma asíncrona. Útil para recalcular estadísticas después de actualizaciones masivas.
+
+**Response (200):**
+```
+Procesamiento masivo de analítica iniciado
+```
+
+**Nota:** Este proceso se ejecuta de forma asíncrona en segundo plano. Las estadísticas se actualizarán progresivamente.
+
 ---
 
 ## 📊 Modelos de Datos
 
-### SongRequest
+### SongWithChordsRequest
 ```json
 {
   "title": "string",
   "artist": "string",
   "album": "string",
-  "year": "integer",
-  "lyricsData": "string",
-  "chords": [
-    {
-      "chordName": "string",
-      "startPos": "integer",
-      "endPos": "integer",
-      "lineNumber": "integer"
-    }
-  ]
+  "year": 2024,
+  "key": "string",
+  "tempo": 120,
+  "youtubeUrl": "string",
+  "spotifyUrl": "string",
+  "coverImageUrl": "string",
+  "coverColor": "string",
+  "lyrics": [LineWithChords],
+  "proposedChords": []
 }
 ```
 
@@ -671,24 +777,14 @@ GET /admin/stats
   "rejectionReason": "string",
   "createdAt": "datetime",
   "publishedAt": "datetime",
-  "createdBy": {
-    "id": "long",
-    "username": "string",
-    "firstname": "string"
-  },
-  "lyrics": [
-    {
-      "lineNumber": "integer",
-      "text": "string",
-      "chords": [
-        {
-          "start": "integer",
-          "name": "string",
-          "chordId": "long"
-        }
-      ]
-    }
-  ]
+  "createdBy": { "id": "long", "username": "string", "firstname": "string" },
+  "youtubeUrl": "string",
+  "spotifyUrl": "string",
+  "youtubeVideoId": "string",
+  "spotifyTrackId": "string",
+  "coverImageUrl": "string",
+  "coverColor": "string",
+  "lyrics": [LineWithChords]
 }
 ```
 
@@ -696,12 +792,13 @@ GET /admin/stats
 ```json
 {
   "content": ["array of items"],
+  "pageNumber": "integer",
+  "pageSize": "integer",
   "totalElements": "long",
   "totalPages": "integer",
-  "size": "integer",
-  "number": "integer",
   "first": "boolean",
   "last": "boolean",
+  "empty": "boolean",
   "numberOfElements": "integer"
 }
 ```
@@ -719,13 +816,21 @@ GET /admin/stats
 }
 ```
 
-### ChordPosition
+### LineWithChords
 ```json
 {
-  "chordName": "string",
-  "startPos": "integer",
-  "endPos": "integer",
-  "lineNumber": "integer"
+  "lineNumber": "integer",
+  "text": "string",
+  "chords": [ChordPositionInfo]
+}
+```
+
+### ChordPositionInfo
+```json
+{
+  "start": "integer",
+  "name": "string",
+  "chordId": "long"
 }
 ```
 
@@ -866,10 +971,10 @@ curl -X POST http://localhost:8080/api/songs \
   }'
 ```
 
-3. **Obtener Acordes Disponibles:**
+3. **Obtener Acordes Disponibles (público):**
 ```bash
 curl -X GET http://localhost:8080/api/songs/available-chords \
-  -H "Authorization: Bearer <token>"
+  -H "Content-Type: application/json"
 ```
 
 4. **Actualizar Posiciones de Acordes:**
@@ -935,6 +1040,9 @@ SERVER_PORT=8080
 6. **Paginación:** Todos los endpoints de listado usan paginación con máximo 20 elementos por página
 7. **Ordenamiento:** Soporte para ordenamiento por múltiples campos con dirección ASC/DESC
 8. **Búsqueda:** La búsqueda es case-insensitive y busca en título y artista
+9. **Transposición:** Los semitonos válidos van de -12 a 12. La transposición mantiene la calidad del acorde (mayor/menor)
+10. **Analytics:** Las estadísticas se calculan de forma asíncrona y pueden tardar en actualizarse
+11. **Procesamiento Masivo:** Los procesos asíncronos (como analytics masivos) no bloquean la respuesta del servidor
 
 ---
 
@@ -942,5 +1050,11 @@ SERVER_PORT=8080
 
 Para soporte técnico o preguntas sobre la API, contacta al equipo de desarrollo.
 
-**Versión de la API:** 1.0.0  
-**Última actualización:** Enero 2024
+**Versión de la API:** 1.1.0  
+**Última actualización:** Octubre 2025
+
+### 🆕 Novedades en v1.1.0:
+- ✨ Endpoint de analytics de canciones (`GET /songs/{id}/analytics`)
+- ✨ Endpoint de transposición de acordes (`GET /songs/{id}/transpose`)
+- ✨ Procesamiento masivo de analytics para administradores (`POST /admin/analytics/process-all`)
+- 📝 Documentación actualizada al 100% con el código fuente

@@ -72,6 +72,15 @@ public class ChordService extends BaseService {
         return mapToResponse(updated);
     }
 
+    public ChordResponse getChordById(Long id) {
+        verifyAdmin();
+
+        ChordCatalog chord = chordCatalogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Acorde no encontrado"));
+
+        return mapToResponse(chord);
+    }
+
     public void deleteChord(Long id) {
         verifyAdmin();
 
@@ -96,20 +105,14 @@ public class ChordService extends BaseService {
     }
     
     // ========== MÉTODOS PARA SELECCIÓN DE ACORDES ==========
-    
-    /**
-     * Obtener todos los acordes disponibles para selección (drag & drop)
-     */
+
     public List<ChordInfo> getAllChordsForSelection() {
         List<ChordCatalog> chords = chordCatalogRepository.findAllByOrderByDisplayOrderAsc();
         return chords.stream()
                 .map(this::mapToChordInfo)
                 .collect(Collectors.toList());
     }
-    
-    /**
-     * Obtener solo acordes comunes para selección rápida
-     */
+
     public List<ChordInfo> getCommonChordsForSelection() {
         List<ChordCatalog> chords = chordCatalogRepository.findByIsCommonTrueOrderByDisplayOrderAsc();
         return chords.stream()
@@ -117,9 +120,7 @@ public class ChordService extends BaseService {
                 .collect(Collectors.toList());
     }
     
-    /**
-     * Mapear ChordCatalog a ChordInfo
-     */
+
     private ChordInfo mapToChordInfo(ChordCatalog chord) {
         return ChordInfo.builder()
                 .id(chord.getId())

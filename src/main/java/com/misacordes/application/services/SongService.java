@@ -9,11 +9,13 @@ import com.misacordes.application.dto.request.SongWithChordsRequest;
 import com.misacordes.application.dto.response.AdminStatsResponse;
 import com.misacordes.application.dto.response.PageResponse;
 import com.misacordes.application.dto.response.SongWithChordsResponse;
-import com.misacordes.application.entities.Role;
-import com.misacordes.application.entities.Song;
-import com.misacordes.application.entities.User;
+import com.misacordes.application.entities.*;
+import com.misacordes.application.dto.request.ProposedChordRequest;
 import com.misacordes.application.repositories.SongRepository;
+import com.misacordes.application.repositories.PlaylistSongRepository;
 import com.misacordes.application.repositories.UserRepository;
+import com.misacordes.application.repositories.ProposedChordRepository;
+import com.misacordes.application.repositories.ChordCatalogRepository;
 import com.misacordes.application.utils.ChordTransposer;
 import com.misacordes.application.utils.SongStatus;
 import com.misacordes.application.config.GlobalExceptionHandler.ResourceNotFoundException;
@@ -37,6 +39,10 @@ public class SongService extends BaseService {
     private final SongAnalyticsService songAnalyticsService;
     private final SongAnalyticsAsyncService songAnalyticsAsyncService;
     private final ObjectMapper objectMapper;
+    private final ProposedChordRepository proposedChordRepository;
+    private final ChordCatalogRepository chordCatalogRepository;
+    private final com.misacordes.application.repositories.DeletionRequestRepository deletionRequestRepository;
+    private final PlaylistSongRepository playlistSongRepository;
 
 
 
@@ -58,8 +64,11 @@ public class SongService extends BaseService {
 
     // ========== ADMIN ==========
 
+    @Transactional
     public SongWithChordsResponse approveSong(Long id) {
         verifyAdmin();
+        User admin = getCurrentUser();
+        
         Song song = songRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
 
@@ -72,7 +81,51 @@ public class SongService extends BaseService {
         song.setPublishedAt(LocalDateTime.now());
 
         Song updated = songRepository.save(song);
+        
+        // Aprobar y agregar los acordes propuestos al catálogo
+        approveProposedChords(song, admin);
+        
         return mapToSongWithChordsResponse(updated);
+    }
+    
+    /**
+     * Aprobar acordes propuestos y agregarlos al catálogo
+     */
+    private void approveProposedChords(Song song, User admin) {
+        List<ProposedChord> proposedChords = proposedChordRepository.findBySong(song);
+        
+        for (ProposedChord proposedChord : proposedChords) {
+            if (proposedChord.getStatus() == ProposalStatus.PENDING) {
+                // Verificar si el acorde ya existe en el catálogo
+                if (chordCatalogRepository.findByName(proposedChord.getName()).isEmpty()) {
+                    // Agregar al catálogo
+                    ChordCatalog newChord = ChordCatalog.builder()
+                            .name(proposedChord.getName())
+                            .fullName(proposedChord.getFullName())
+                            .category(proposedChord.getCategory())
+                            .fingerPositions(proposedChord.getFingerPositions())
+                            .notes(proposedChord.getNotes())
+                            .isCommon(false) // Los acordes propuestos no son comunes por defecto
+                            .difficultyLevel(DifficultyLevel.INTERMEDIATE)
+                            .build();
+                    
+                    ChordCatalog savedChord = chordCatalogRepository.save(newChord);
+                    
+                    // Actualizar la propuesta
+                    proposedChord.setStatus(ProposalStatus.APPROVED);
+                    proposedChord.setCatalogChordId(savedChord.getId());
+                } else {
+                    // Si ya existe, solo marcar como aprobado
+                    proposedChord.setStatus(ProposalStatus.APPROVED);
+                    ChordCatalog existingChord = chordCatalogRepository.findByName(proposedChord.getName()).get();
+                    proposedChord.setCatalogChordId(existingChord.getId());
+                }
+                
+                proposedChord.setReviewedAt(LocalDateTime.now());
+                proposedChord.setReviewedBy(admin);
+                proposedChordRepository.save(proposedChord);
+            }
+        }
     }
 
     public SongWithChordsResponse rejectSong(Long id, String reason) {
@@ -102,20 +155,6 @@ public class SongService extends BaseService {
         return song.getIsPublic() && song.getStatus() == SongStatus.APPROVED;
     }
 
-
-    public void deleteSong(Long id) {
-        User currentUser = getCurrentUser();
-        Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
-
-        if (song.getStatus() != SongStatus.DRAFT) {
-            throw new BusinessException("Solo puedes eliminar canciones en borrador");
-        }
-
-        songRepository.delete(song);
-    }
-
-
     public SongWithChordsResponse unpublishSong(Long id) {
         verifyAdmin();
         Song song = songRepository.findById(id)
@@ -133,10 +172,16 @@ public class SongService extends BaseService {
         return mapToSongWithChordsResponse(updated);
     }
 
+    @Transactional
     public void deleteSongAdmin(Long id) {
         verifyAdmin();
         Song song = songRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
+
+        // Borrar dependencias para evitar violaciones de FK
+        proposedChordRepository.deleteBySongId(id);
+        deletionRequestRepository.deleteBySongId(id);
+        playlistSongRepository.deleteBySongId(id);
 
         songRepository.delete(song);
     }
@@ -166,6 +211,14 @@ public class SongService extends BaseService {
                 .artist(request.getArtist())
                 .album(request.getAlbum())
                 .year(request.getYear())
+                .key(request.getKey())
+                .tempo(request.getTempo())
+                // Enlaces multimedia
+                .youtubeUrl(request.getYoutubeUrl())
+                .spotifyUrl(request.getSpotifyUrl())
+                // Personalización de portada
+                .coverImageUrl(request.getCoverImageUrl())
+                .coverColor(request.getCoverColor())
                 .createdBy(currentUser)
                 .chordsMap(convertToJson(request))
                 .status(SongStatus.DRAFT)
@@ -174,9 +227,53 @@ public class SongService extends BaseService {
 
         Song savedSong = songRepository.save(song);
 
+        // Guardar acordes propuestos si existen
+        if (request.getProposedChords() != null && !request.getProposedChords().isEmpty()) {
+            saveProposedChords(request.getProposedChords(), savedSong, currentUser);
+        }
+
         processSongAnalyticsAsync(savedSong);
         
         return mapToSongWithChordsResponse(savedSong);
+    }
+    
+    /**
+     * Guardar acordes propuestos por el usuario
+     */
+    private void saveProposedChords(List<ProposedChordRequest> proposedChords, Song song, User user) {
+        for (ProposedChordRequest chordRequest : proposedChords) {
+            // Determinar la categoría del acorde
+            ChordCategory category = determineChordCategory(chordRequest.getCategory());
+            
+            ProposedChord proposedChord = ProposedChord.builder()
+                    .name(chordRequest.getName())
+                    .fullName(chordRequest.getFullName())
+                    .category(category)
+                    .fingerPositions(chordRequest.getFingerPositions())
+                    .notes(chordRequest.getNotes())
+                    .proposedBy(user)
+                    .song(song)
+                    .status(ProposalStatus.PENDING)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            
+            proposedChordRepository.save(proposedChord);
+        }
+    }
+    
+    /**
+     * Determinar la categoría del acorde basándose en el string recibido
+     */
+    private ChordCategory determineChordCategory(String categoryStr) {
+        if (categoryStr == null || categoryStr.isEmpty()) {
+            return ChordCategory.OTHER;
+        }
+        
+        try {
+            return ChordCategory.valueOf(categoryStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ChordCategory.OTHER;
+        }
     }
 
     public SongWithChordsResponse getSongWithChordsById(Long id) {
@@ -193,28 +290,54 @@ public class SongService extends BaseService {
 
     public SongWithChordsResponse updateSongWithChords(Long id, SongWithChordsRequest request) {
         User currentUser = getCurrentUser();
-        Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
         
-        if (song.getStatus() != SongStatus.DRAFT && song.getStatus() != SongStatus.REJECTED) {
-            throw new BusinessException("No puedes editar una canción en estado " + song.getStatus());
-        }
+        // findByIdAndCreatedById ya verifica que el usuario sea el creador
+        Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada o no tienes permisos para editarla"));
 
         if (!songAnalyticsService.validateChordsMap(convertToJson(request))) {
             throw new BusinessException("Formato de acordes inválido");
         }
 
+        // Actualizar campos básicos
         song.setTitle(request.getTitle());
         song.setArtist(request.getArtist());
         song.setAlbum(request.getAlbum());
         song.setYear(request.getYear());
+        song.setKey(request.getKey());
+        song.setTempo(request.getTempo());
+        
+        // Actualizar enlaces multimedia
+        song.setYoutubeUrl(request.getYoutubeUrl());
+        song.setSpotifyUrl(request.getSpotifyUrl());
+        
+        // Actualizar personalización de portada
+        song.setCoverImageUrl(request.getCoverImageUrl());
+        song.setCoverColor(request.getCoverColor());
+        
         song.setChordsMap(convertToJson(request));
 
+        // Lógica de estados:
+        // - DRAFT o REJECTED: se mantiene el estado
+        // - APPROVED: pasa a PENDING (requiere nueva aprobación)
+        // - PENDING: se mantiene PENDING
+        if (song.getStatus() == SongStatus.APPROVED) {
+            song.setStatus(SongStatus.PENDING);
+            song.setPublishedAt(null); // Ya no está publicada hasta nueva aprobación
+            System.out.println("⚠️ Canción APROBADA editada por creador. Cambiando a PENDING para nueva revisión.");
+        }
+        
         if (song.getStatus() == SongStatus.REJECTED) {
             song.setRejectionReason(null);
+            song.setStatus(SongStatus.DRAFT); // Vuelve a borrador
         }
 
         Song updated = songRepository.save(song);
+
+        // Guardar acordes propuestos si existen
+        if (request.getProposedChords() != null && !request.getProposedChords().isEmpty()) {
+            saveProposedChords(request.getProposedChords(), updated, currentUser);
+        }
 
         processSongAnalyticsAsync(updated);
         
@@ -301,8 +424,16 @@ public class SongService extends BaseService {
                 .artist(song.getArtist())
                 .album(song.getAlbum())
                 .year(song.getYear())
-                    .key(songData != null ? songData.getKey() : null)
-                    .tempo(songData != null ? songData.getTempo() : null)
+                    .key(song.getKey())
+                    .tempo(song.getTempo())
+                    // Enlaces multimedia
+                    .youtubeUrl(song.getYoutubeUrl())
+                    .spotifyUrl(song.getSpotifyUrl())
+                    .youtubeVideoId(song.getYoutubeVideoId())
+                    .spotifyTrackId(song.getSpotifyTrackId())
+                    // Personalización
+                    .coverImageUrl(song.getCoverImageUrl())
+                    .coverColor(song.getCoverColor())
                 .status(song.getStatus())
                 .isPublic(song.getIsPublic())
                 .rejectionReason(song.getRejectionReason())
@@ -354,6 +485,72 @@ public class SongService extends BaseService {
         }
 
         return response;
+    }
+
+    /**
+     * Eliminar canción directamente (solo si NO está APPROVED)
+     */
+    @Transactional
+    public void deleteSong(Long id) {
+        User currentUser = getCurrentUser();
+        Song song = songRepository.findByIdAndCreatedById(id, currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada o no tienes permisos para eliminarla"));
+        
+        // Verificar que la canción NO esté aprobada
+        if (song.getStatus() == SongStatus.APPROVED) {
+            throw new BusinessException("No puedes eliminar una canción aprobada. Debes solicitar su eliminación al administrador.");
+        }
+        
+        // Eliminar dependencias primero
+        proposedChordRepository.deleteBySongId(id);
+        deletionRequestRepository.deleteBySongId(id);
+        playlistSongRepository.deleteBySongId(id);
+
+        // Eliminar la canción
+        songRepository.delete(song);
+        System.out.println("✅ Canción eliminada: " + song.getTitle() + " (ID: " + id + ") por usuario: " + currentUser.getUsername());
+    }
+
+    /**
+     * Solicitar eliminación de canción APPROVED al administrador
+     */
+    @Transactional
+    public DeletionRequest requestSongDeletion(Long songId, String reason) {
+        User currentUser = getCurrentUser();
+        Song song = songRepository.findByIdAndCreatedById(songId, currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada o no tienes permisos"));
+        
+        // Verificar que la canción esté aprobada
+        if (song.getStatus() != SongStatus.APPROVED) {
+            throw new BusinessException("Solo puedes solicitar la eliminación de canciones aprobadas. Para otras, elimínalas directamente.");
+        }
+        
+        // Verificar si ya existe una solicitud pendiente
+        if (deletionRequestRepository.existsBySongAndStatus(song, DeletionStatus.PENDING)) {
+            throw new BusinessException("Ya existe una solicitud pendiente de eliminación para esta canción");
+        }
+        
+        // Crear solicitud de eliminación
+        DeletionRequest request = DeletionRequest.builder()
+                .song(song)
+                .requestedBy(currentUser)
+                .reason(reason)
+                .status(DeletionStatus.PENDING)
+                .build();
+        
+        DeletionRequest saved = deletionRequestRepository.save(request);
+        System.out.println("📨 Solicitud de eliminación creada para canción: " + song.getTitle() + " (ID: " + songId + ")");
+        
+        return saved;
+    }
+
+    /**
+     * Verificar si existe una solicitud de eliminación pendiente para una canción
+     */
+    public boolean hasPendingDeletionRequest(Long songId) {
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
+        return deletionRequestRepository.existsBySongAndStatus(song, DeletionStatus.PENDING);
     }
 
 }

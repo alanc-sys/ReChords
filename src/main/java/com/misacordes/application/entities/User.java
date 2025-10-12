@@ -28,11 +28,21 @@ public class User implements UserDetails {
     private String firstname;
     private String lastname;
     private String country;
+    @Enumerated(EnumType.STRING)
     private Role role;
+    
+    @Column(name = "failed_attempts", nullable = false)
+    private Integer failedAttempts = 0;
+    
+    @Column(name = "account_locked")
+    private Boolean accountLocked = false;
+    
+    @Column(name = "lock_time")
+    private java.time.LocalDateTime lockTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role != null ? List.of(new SimpleGrantedAuthority(role.name())) : List.of();
     }
 
     @Override
@@ -42,6 +52,15 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
+        if (accountLocked != null && accountLocked) {
+            if (lockTime != null) {
+                if (java.time.LocalDateTime.now().isAfter(lockTime.plusMinutes(15))) {
+                    return true; // El servicio desbloqueará la cuenta
+                }
+                return false;
+            }
+            return false;
+        }
         return true;
     }
 

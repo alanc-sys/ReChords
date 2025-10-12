@@ -22,6 +22,15 @@ public class SongWithChordsResponse {
     private Integer year;
     private String key;          // Tonalidad de la canción
     private Integer tempo;       // BPM de la canción
+
+    private String youtubeUrl;
+    private String spotifyUrl;
+    private String youtubeVideoId;  // ID extraído para embed
+    private String spotifyTrackId;  // ID extraído para embed
+    
+    private String coverImageUrl;
+    private String coverColor;
+    
     private SongStatus status;
     private Boolean isPublic;
     private String rejectionReason;
@@ -29,7 +38,6 @@ public class SongWithChordsResponse {
     private LocalDateTime publishedAt;
     private List<LineWithChords> lyrics; // Líneas con texto y acordes
 
-    // Info del creador
     private CreatorInfo createdBy;
 
     @Data

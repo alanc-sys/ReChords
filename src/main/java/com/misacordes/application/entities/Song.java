@@ -23,6 +23,24 @@ public class Song {
         private String artist;
         private String album;
         private Integer year;
+        
+        @Column(name = "song_key", length = 10)
+        private String key;  // Tonalidad: C, Am, etc.
+        
+        @Column
+        private Integer tempo;  // BPM
+        
+        @Column(name = "youtube_url", length = 500)
+        private String youtubeUrl;
+        
+        @Column(name = "spotify_url", length = 500)
+        private String spotifyUrl;
+        
+        @Column(name = "cover_image_url", length = 500)
+        private String coverImageUrl;  // URL de imagen subida
+        
+        @Column(name = "cover_color", length = 7)
+        private String coverColor;  // Color hex para portada generada (#FF5733)
 
         @ManyToOne
         @JoinColumn(name = "created_by", nullable = false)
@@ -69,5 +87,32 @@ public class Song {
         @PreUpdate
         protected void onUpdate() {
                 updatedAt = LocalDateTime.now();
+        }
+        
+
+        public String getYoutubeVideoId() {
+                if (youtubeUrl == null || youtubeUrl.isEmpty()) {
+                        return null;
+                }
+                
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                        "(?:youtube\\.com/watch\\?v=|youtu\\.be/|youtube\\.com/embed/)([a-zA-Z0-9_-]{11})"
+                );
+                java.util.regex.Matcher matcher = pattern.matcher(youtubeUrl);
+                
+                return matcher.find() ? matcher.group(1) : null;
+        }
+
+        public String getSpotifyTrackId() {
+                if (spotifyUrl == null || spotifyUrl.isEmpty()) {
+                        return null;
+                }
+                
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                        "spotify\\.com/track/([a-zA-Z0-9]{22})"
+                );
+                java.util.regex.Matcher matcher = pattern.matcher(spotifyUrl);
+                
+                return matcher.find() ? matcher.group(1) : null;
         }
 }

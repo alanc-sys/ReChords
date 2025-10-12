@@ -85,10 +85,11 @@ ReChords es una aplicación de **biblioteca musical personal** que permite a los
 #### 1. **Capa de Presentación (Controllers)**
 - **Responsabilidad:** Manejo de requests HTTP
 - **Componentes:** 
-  - `AuthController` - Autenticación
-  - `SongController` - Gestión de canciones
-  - `AdminController` - Funciones de administrador
-  - `ChordController` - Catálogo de acordes
+  - `AuthController` - Autenticación (`/api/auth`)
+  - `SongController` - Gestión de canciones y acordes (`/api/songs`)
+  - `PlaylistController` - Gestión de playlists (`/api/playlists`)
+  - `AdminController` - Funciones de administrador (`/api/admin`)
+  - `FileUploadController` - Subida/eliminación de portadas (`/api/songs/{id}/cover`)
 
 #### 2. **Capa de Servicios (Business Logic)**
 - **Responsabilidad:** Lógica de negocio y orquestación
@@ -585,7 +586,7 @@ CREATE INDEX idx_chord_common ON chord_catalog(is_common);
 // SecurityConfig configura:
 1. CSRF deshabilitado (API REST)
 2. JWT filter antes de UsernamePasswordAuthenticationFilter
-3. Rutas públicas: /auth/**
+3. Rutas públicas: /auth/**, /api/auth/**, /api/songs/available-chords, /api/songs/common-chords, /api/uploads/**
 4. Rutas admin: /api/admin/** (requiere ADMIN)
 5. Resto de rutas: requieren autenticación
 ```
@@ -840,27 +841,30 @@ El sistema de paginación de ReChords está implementado para optimizar el rendi
 
 #### 1. **PageResponse DTO**
 ```java
-@Data
+@Getter
+@Setter
 @Builder
 public class PageResponse<T> {
     private List<T> content;
+    private int pageNumber;
+    private int pageSize;
     private long totalElements;
     private int totalPages;
-    private int size;
-    private int number;
     private boolean first;
     private boolean last;
+    private boolean empty;
     private int numberOfElements;
-    
+
     public static <T> PageResponse<T> from(Page<T> page) {
         return PageResponse.<T>builder()
             .content(page.getContent())
+            .pageNumber(page.getNumber())
+            .pageSize(page.getSize())
             .totalElements(page.getTotalElements())
             .totalPages(page.getTotalPages())
-            .size(page.getSize())
-            .number(page.getNumber())
             .first(page.isFirst())
             .last(page.isLast())
+            .empty(page.isEmpty())
             .numberOfElements(page.getNumberOfElements())
             .build();
     }
@@ -942,9 +946,9 @@ public class songController {
 ### Parámetros de Paginación
 
 #### Query Parameters
-- **`page`** (opcional): Número de página (0-based, default: 0)
-- **`size`** (opcional): Tamaño de página (default: 20, máximo: 20)
-- **`sort`** (opcional): Campo y dirección de ordenamiento (default: "createdAt,desc")
+- `page` (opcional): Número de página (0-based, default: 0)
+- `size` (opcional): Tamaño de página (default: 20; máximo 20 usuario, 100 admin)
+- `sort` (opcional): Campo y dirección de ordenamiento (default: "createdAt,desc")
 
 #### Ejemplos de Uso
 ```http

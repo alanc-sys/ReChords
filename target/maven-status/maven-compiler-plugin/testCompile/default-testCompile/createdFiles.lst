@@ -1,12 +1,17 @@
 com/misacordes/application/dto/request/ChordPositionInfoTest.class
 com/misacordes/application/dto/response/AuthResponseTest.class
+com/misacordes/application/dto/request/LineWithChordsTest.class
 com/misacordes/application/services/auth/AuthServiceTest.class
 com/misacordes/application/config/ApplicationConfigTest.class
+com/misacordes/application/dto/request/SongWithChordsRequestTest.class
 com/misacordes/application/ApplicationTests.class
 com/misacordes/application/services/auth/JwtServiceTest.class
+com/misacordes/application/services/auth/ChordServiceTest.class
 com/misacordes/application/dto/request/LoginRequestTest.class
+com/misacordes/application/controller/SongControllerTest.class
 com/misacordes/application/dto/response/ChordPositionInfoTest.class
 com/misacordes/application/controller/auth/AuthControllerTest.class
 com/misacordes/application/dto/request/RegisterRequestTest.class
 com/misacordes/application/entities/UserTest.class
 com/misacordes/application/services/auth/SongServiceTest.class
+com/misacordes/application/repositories/SongRepositoryTest.class

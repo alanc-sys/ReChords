@@ -137,8 +137,12 @@ public class SongAnalyticsService extends BaseService {
                 return false;
             }
 
-            return songData.getLyrics().stream()
-                .allMatch(line -> line.getText() != null && !line.getText().trim().isEmpty());
+            // Permitir líneas vacías (para espaciado, acordes instrumentales, etc.)
+            // Solo validamos que al menos UNA línea tenga texto
+            boolean hasAtLeastOneLineWithText = songData.getLyrics().stream()
+                .anyMatch(line -> line.getText() != null && !line.getText().trim().isEmpty());
+                
+            return hasAtLeastOneLineWithText;
                 
         } catch (JsonProcessingException e) {
             log.error("Invalid chords map JSON: {}", e.getMessage());
