@@ -8,6 +8,7 @@ import com.misacordes.application.dto.response.SongAnalyticsResponse;
 import com.misacordes.application.services.SongImportService;
 import com.misacordes.application.services.ChordService;
 import com.misacordes.application.services.SongService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class SongController {
     private final SongImportService songImportService;
 
     @PostMapping
-    public ResponseEntity<SongWithChordsResponse> createSong(@RequestBody SongWithChordsRequest request){
+    public ResponseEntity<SongWithChordsResponse> createSong(@Valid @RequestBody SongWithChordsRequest request){
         SongWithChordsResponse response = songService.createSongWithChords(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -36,7 +37,7 @@ public class SongController {
     @PutMapping("/{id}")
     public ResponseEntity<SongWithChordsResponse> updateSong(
             @PathVariable long id,
-            @RequestBody SongWithChordsRequest request){
+            @Valid @RequestBody SongWithChordsRequest request){
         SongWithChordsResponse response = songService.updateSongWithChords(id, request);
         return ResponseEntity.ok(response);
     }

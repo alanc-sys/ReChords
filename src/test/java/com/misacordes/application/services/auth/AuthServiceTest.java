@@ -40,6 +40,9 @@ class AuthServiceTest {
 
     @Mock
     private PlaylistService playlistService;
+    
+    @Mock(lenient = true)
+    private com.misacordes.application.services.LoginAttemptService loginAttemptService;
 
     @InjectMocks
     private AuthService authService;
@@ -58,7 +61,12 @@ class AuthServiceTest {
                 .lastname("User")
                 .country("Spain")
                 .role(Role.USER)
+                .failedAttempts(0)
+                .accountLocked(false)
                 .build();
+        
+        // Setup default mock behavior for login attempt service
+        when(loginAttemptService.isAccountLocked(anyString())).thenReturn(false);
 
         loginRequest = LoginRequest.builder()
                 .username("testuser")
@@ -96,6 +104,7 @@ class AuthServiceTest {
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userRepository).findByUsername(loginRequest.getUsername());
         verify(jwtService).getToken(testUser);
+        verify(loginAttemptService).loginSucceeded(loginRequest.getUsername());
     }
 
     @Test
@@ -147,7 +156,9 @@ class AuthServiceTest {
                 user.getFirstname().equals(registerRequest.getFirstname()) &&
                 user.getLastname().equals(registerRequest.getLastname()) &&
                 user.getCountry().equals(registerRequest.getCountry()) &&
-                user.getRole().equals(Role.USER)
+                user.getRole().equals(Role.USER) &&
+                user.getFailedAttempts() == 0 &&
+                user.getAccountLocked() == false
         ));
         verify(jwtService).getToken(any(User.class));
     }
@@ -186,7 +197,42 @@ class AuthServiceTest {
                 user.getFirstname() == null &&
                 user.getLastname() == null &&
                 user.getCountry() == null &&
-                user.getRole().equals(Role.USER)
+                user.getRole().equals(Role.USER) &&
+                user.getFailedAttempts() == 0 &&
+                user.getAccountLocked() == false
         ));
+    }
+    
+    @Test
+    void testLogin_AccountLocked() {
+        // Arrange
+        when(loginAttemptService.isAccountLocked(loginRequest.getUsername())).thenReturn(true);
+        when(loginAttemptService.getLockTimeRemaining(loginRequest.getUsername())).thenReturn(10L);
+
+        // Act & Assert
+        org.springframework.security.authentication.LockedException exception = assertThrows(
+                org.springframework.security.authentication.LockedException.class,
+                () -> authService.login(loginRequest)
+        );
+        
+        assertTrue(exception.getMessage().contains("bloqueada"));
+        verify(authenticationManager, never()).authenticate(any());
+    }
+    
+    @Test
+    void testLogin_BadCredentials() {
+        // Arrange
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(new org.springframework.security.authentication.BadCredentialsException("Bad credentials"));
+        when(loginAttemptService.getAttemptsRemaining(loginRequest.getUsername())).thenReturn(3);
+
+        // Act & Assert
+        org.springframework.security.authentication.BadCredentialsException exception = assertThrows(
+                org.springframework.security.authentication.BadCredentialsException.class,
+                () -> authService.login(loginRequest)
+        );
+        
+        assertTrue(exception.getMessage().contains("Credenciales inválidas"));
+        verify(loginAttemptService).loginFailed(loginRequest.getUsername());
     }
 }

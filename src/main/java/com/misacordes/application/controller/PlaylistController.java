@@ -20,10 +20,6 @@ public class PlaylistController {
 
     private final PlaylistService playlistService;
 
-    /**
-     * POST /api/playlists
-     * Crear una nueva playlist
-     */
     @PostMapping
     public ResponseEntity<PlaylistResponse> createPlaylist(@RequestBody CreatePlaylistRequest request) {
         try {
@@ -34,10 +30,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * GET /api/playlists/my
-     * Obtener todas las playlists del usuario actual
-     */
     @GetMapping("/my")
     public ResponseEntity<List<PlaylistSummaryResponse>> getMyPlaylists() {
         try {
@@ -48,10 +40,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * GET /api/playlists/{id}
-     * Obtener una playlist específica con sus canciones
-     */
     @GetMapping("/{id}")
     public ResponseEntity<PlaylistResponse> getPlaylistById(@PathVariable Long id) {
         try {
@@ -62,10 +50,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * PUT /api/playlists/{id}
-     * Actualizar una playlist
-     */
     @PutMapping("/{id}")
     public ResponseEntity<PlaylistResponse> updatePlaylist(
             @PathVariable Long id,
@@ -78,10 +62,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * DELETE /api/playlists/{id}
-     * Eliminar una playlist
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePlaylist(@PathVariable Long id) {
         try {
@@ -92,10 +72,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * POST /api/playlists/{id}/songs
-     * Añadir una canción a una playlist
-     */
     @PostMapping("/{id}/songs")
     public ResponseEntity<PlaylistResponse> addSongToPlaylist(
             @PathVariable Long id,
@@ -108,10 +84,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * DELETE /api/playlists/{id}/songs/{songId}
-     * Eliminar una canción de una playlist
-     */
     @DeleteMapping("/{id}/songs/{songId}")
     public ResponseEntity<PlaylistResponse> removeSongFromPlaylist(
             @PathVariable Long id,
@@ -124,10 +96,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * GET /api/playlists/public
-     * Obtener playlists públicas para explorar
-     */
     @GetMapping("/public")
     public ResponseEntity<List<PlaylistSummaryResponse>> getPublicPlaylists() {
         try {
@@ -138,10 +106,6 @@ public class PlaylistController {
         }
     }
 
-    /**
-     * GET /api/playlists/search?q=query
-     * Buscar playlists públicas por nombre
-     */
     @GetMapping("/search")
     public ResponseEntity<List<PlaylistSummaryResponse>> searchPublicPlaylists(@RequestParam String q) {
         try {

@@ -17,9 +17,6 @@ public class SongAnalyticsAsyncService extends BaseService {
     private final SongAnalyticsService songAnalyticsService;
     private final SongRepository songRepository;
 
-    /**
-     * Procesar analítica de una canción de forma asíncrona
-     */
     @Async("songAnalyticsExecutor")
     public void processSongAnalyticsAsync(Long songId) {
         // Verificar que el usuario esté autenticado
@@ -56,9 +53,6 @@ public class SongAnalyticsAsyncService extends BaseService {
         }
     }
 
-    /**
-     * Validar que los acordes de la canción existan en el catálogo
-     */
     private void validateChordsAgainstCatalog(Song song) {
         try {
             var uniqueChords = songAnalyticsService.extractUniqueChords(song);
@@ -82,9 +76,6 @@ public class SongAnalyticsAsyncService extends BaseService {
         }
     }
 
-    /**
-     * Procesar analítica para múltiples canciones de forma asíncrona
-     */
     @Async("songAnalyticsExecutor")
     public void processMultipleSongsAnalyticsAsync() {
         // Verificar que el usuario tenga permisos de administrador

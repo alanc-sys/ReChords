@@ -57,7 +57,7 @@ class UserTest {
     @Test
     void testUserAllArgsConstructor() {
         // Act
-        User newUser = new User(2L, "newuser", "pass", "New", "User", "France", Role.ADMIN);
+        User newUser = new User(2L, "newuser", "pass", "New", "User", "France", Role.ADMIN, 0, false, null);
 
         // Assert
         assertEquals(2L, newUser.getId());
@@ -67,6 +67,9 @@ class UserTest {
         assertEquals("User", newUser.getLastname());
         assertEquals("France", newUser.getCountry());
         assertEquals(Role.ADMIN, newUser.getRole());
+        assertEquals(0, newUser.getFailedAttempts());
+        assertEquals(false, newUser.getAccountLocked());
+        assertNull(newUser.getLockTime());
     }
 
     @Test
@@ -113,6 +116,49 @@ class UserTest {
     void testIsAccountNonLocked() {
         // Act & Assert
         assertTrue(user.isAccountNonLocked());
+    }
+    
+    @Test
+    void testIsAccountNonLocked_WhenLocked() {
+        // Arrange
+        user.setAccountLocked(true);
+        user.setLockTime(java.time.LocalDateTime.now());
+        
+        // Act & Assert
+        assertFalse(user.isAccountNonLocked());
+    }
+    
+    @Test
+    void testIsAccountNonLocked_WhenLockExpired() {
+        // Arrange - lockTime hace más de 15 minutos
+        user.setAccountLocked(true);
+        user.setLockTime(java.time.LocalDateTime.now().minusMinutes(20));
+        
+        // Act & Assert
+        // Debería estar desbloqueado (pero el servicio debe actualizar la BD)
+        assertTrue(user.isAccountNonLocked());
+    }
+    
+    @Test
+    void testFailedAttemptsHandling() {
+        // Arrange & Act
+        user.setFailedAttempts(3);
+        
+        // Assert
+        assertEquals(3, user.getFailedAttempts());
+        assertNotNull(user.getFailedAttempts());
+    }
+    
+    @Test
+    void testLockTimeHandling() {
+        // Arrange
+        java.time.LocalDateTime lockTime = java.time.LocalDateTime.now();
+        
+        // Act
+        user.setLockTime(lockTime);
+        
+        // Assert
+        assertEquals(lockTime, user.getLockTime());
     }
 
     @Test

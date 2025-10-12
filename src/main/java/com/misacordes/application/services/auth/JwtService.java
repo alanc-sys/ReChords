@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import com.misacordes.application.entities.User;
@@ -17,23 +18,40 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+    
+    @Value("${jwt.expiration.hours:168}")
+    private long expirationHours;
 
     public String getToken(UserDetails user) {
-        return getToken(new HashMap<>(), user);
+        Map<String, Object> claims = new HashMap<>();
+        
+        // Agregar el rol al token si el usuario es de tipo User
+        if (user instanceof User) {
+            User userEntity = (User) user;
+            claims.put("role", userEntity.getRole().name());
+        }
+        
+        return getToken(claims, user);
     }
     
     public String getToken(User user) {
-        return getToken(new HashMap<>(), user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        return getToken(claims, user);
     }
 
     private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+        // Token válido por el tiempo configurado en horas (default 7 días = 168 horas)
+        long expirationTime = 1000L * 60 * 60 * expirationHours;
+        
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

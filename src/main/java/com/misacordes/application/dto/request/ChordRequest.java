@@ -2,6 +2,8 @@ package com.misacordes.application.dto.request;
 
 import com.misacordes.application.entities.ChordCategory;
 import com.misacordes.application.entities.DifficultyLevel;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +18,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChordRequest {
 
-    // @NotBlank(message = "El nombre del acorde es obligatorio") // Comentado temporalmente
+    @NotBlank
     private String name;
 
     private String fullName;
 
-    // @NotNull(message = "La categoría es obligatoria") // Comentado temporalmente
+    @NotNull(message = "La categoría es obligatoria")
     private ChordCategory category;
 
     private Integer displayOrder;

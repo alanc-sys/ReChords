@@ -30,8 +30,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/songs/available-chords").permitAll()
                         .requestMatchers("/api/songs/common-chords").permitAll()
+                        .requestMatchers("/api/chords/**").permitAll()
+                        .requestMatchers("/api/uploads/**").permitAll()  // Servir archivos subidos
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -39,6 +42,18 @@ public class SecurityConfig {
                         sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .formLogin(formLogin -> formLogin.disable())
+                // Headers de seguridad HTTP
+                .headers(headers -> headers
+                        .contentTypeOptions(contentTypeOptions -> {})  // X-Content-Type-Options: nosniff
+                        .xssProtection(xss -> {})  // X-XSS-Protection: 1; mode=block
+                        .frameOptions(frame -> frame.deny())  // X-Frame-Options: DENY (previene clickjacking)
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31536000)  // HSTS por 1 año
+                        )
+                )
                 .build();
     }
 

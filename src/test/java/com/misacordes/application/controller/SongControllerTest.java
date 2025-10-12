@@ -41,7 +41,7 @@ class SongControllerTest {
     private SongImportService songImportService;
 
     @InjectMocks
-    private songController songController;
+    private SongController songController;
 
     private SongWithChordsRequest testRequest;
     private SongWithChordsResponse testResponse;

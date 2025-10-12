@@ -24,8 +24,13 @@ class SongWithChordsRequestTest {
                 2024,
                 "C",
                 120,
+                null,  // youtubeUrl
+                null,  // spotifyUrl
+                null,  // coverImageUrl
+                null,  // coverColor
                 lyrics,
-                1L
+                1L,
+                null  // proposedChords (opcional)
         );
 
         // Assert
@@ -37,6 +42,7 @@ class SongWithChordsRequestTest {
         assertEquals(120, request.getTempo());
         assertEquals(1, request.getLyrics().size());
         assertEquals(1L, request.getCreatedBy());
+        assertNull(request.getProposedChords());
     }
 
     @Test

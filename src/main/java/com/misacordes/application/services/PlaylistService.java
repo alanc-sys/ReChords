@@ -1,7 +1,11 @@
 package com.misacordes.application.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.misacordes.application.dto.request.AddSongToPlaylistRequest;
 import com.misacordes.application.dto.request.CreatePlaylistRequest;
+import com.misacordes.application.dto.request.SongWithChordsRequest;
 import com.misacordes.application.dto.request.UpdatePlaylistRequest;
 import com.misacordes.application.dto.response.PlaylistResponse;
 import com.misacordes.application.dto.response.PlaylistSummaryResponse;
@@ -13,6 +17,7 @@ import com.misacordes.application.entities.User;
 import com.misacordes.application.repositories.PlaylistRepository;
 import com.misacordes.application.repositories.PlaylistSongRepository;
 import com.misacordes.application.repositories.SongRepository;
+import com.misacordes.application.config.GlobalExceptionHandler.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +33,11 @@ public class PlaylistService extends BaseService {
     private final PlaylistRepository playlistRepository;
     private final PlaylistSongRepository playlistSongRepository;
     private final SongRepository songRepository;
+    private final ObjectMapper objectMapper;
 
-    /**
-     * Crear una nueva playlist
-     */
     public PlaylistResponse createPlaylist(CreatePlaylistRequest request) {
         User currentUser = getCurrentUser();
         
-        // Verificar que no exista una playlist con el mismo nombre
         if (playlistRepository.existsByUserIdAndName(currentUser.getId(), request.getName())) {
             throw new RuntimeException("Ya tienes una playlist con el nombre: " + request.getName());
         }
@@ -52,9 +54,6 @@ public class PlaylistService extends BaseService {
         return mapToPlaylistResponse(savedPlaylist);
     }
 
-    /**
-     * Obtener todas las playlists del usuario actual
-     */
     @Transactional(readOnly = true)
     public List<PlaylistSummaryResponse> getMyPlaylists() {
         User currentUser = getCurrentUser();
@@ -65,9 +64,6 @@ public class PlaylistService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtener una playlist específica con sus canciones
-     */
     @Transactional(readOnly = true)
     public PlaylistResponse getPlaylistById(Long playlistId) {
         User currentUser = getCurrentUser();
@@ -77,9 +73,6 @@ public class PlaylistService extends BaseService {
         return mapToPlaylistResponseWithSongs(playlist);
     }
 
-    /**
-     * Actualizar una playlist
-     */
     public PlaylistResponse updatePlaylist(Long playlistId, UpdatePlaylistRequest request) {
         User currentUser = getCurrentUser();
         Playlist playlist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
@@ -105,9 +98,6 @@ public class PlaylistService extends BaseService {
         return mapToPlaylistResponse(updatedPlaylist);
     }
 
-    /**
-     * Eliminar una playlist
-     */
     public void deletePlaylist(Long playlistId) {
         User currentUser = getCurrentUser();
         Playlist playlist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
@@ -125,9 +115,6 @@ public class PlaylistService extends BaseService {
         playlistRepository.delete(playlist);
     }
 
-    /**
-     * Añadir una canción a una playlist
-     */
     public PlaylistResponse addSongToPlaylist(Long playlistId, AddSongToPlaylistRequest request) {
         User currentUser = getCurrentUser();
         Playlist playlist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
@@ -136,17 +123,14 @@ public class PlaylistService extends BaseService {
         Song song = songRepository.findById(request.getSongId())
                 .orElseThrow(() -> new RuntimeException("Canción no encontrada"));
         
-        // Verificar que la canción sea pública o del usuario
         if (!song.getIsPublic() && song.getCreatedBy().getId() != currentUser.getId()) {
             throw new RuntimeException("No puedes añadir esta canción a tu playlist");
         }
         
-        // Verificar que la canción no esté ya en la playlist
         if (playlistSongRepository.findByPlaylistIdAndSongId(playlistId, request.getSongId()).isPresent()) {
             throw new RuntimeException("La canción ya está en esta playlist");
         }
         
-        // Determinar el índice de orden
         Integer orderIndex = request.getOrderIndex();
         if (orderIndex == null) {
             orderIndex = playlistSongRepository.getNextOrderIndex(playlistId);
@@ -163,9 +147,6 @@ public class PlaylistService extends BaseService {
         return mapToPlaylistResponseWithSongs(playlist);
     }
 
-    /**
-     * Eliminar una canción de una playlist
-     */
     public PlaylistResponse removeSongFromPlaylist(Long playlistId, Long songId) {
         User currentUser = getCurrentUser();
         Playlist playlist = playlistRepository.findByIdAndUserId(playlistId, currentUser.getId())
@@ -183,9 +164,7 @@ public class PlaylistService extends BaseService {
         return mapToPlaylistResponseWithSongs(playlist);
     }
 
-    /**
-     * Obtener playlists públicas para explorar
-     */
+
     @Transactional(readOnly = true)
     public List<PlaylistSummaryResponse> getPublicPlaylists() {
         User currentUser = getCurrentUser();
@@ -196,9 +175,6 @@ public class PlaylistService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Buscar playlists públicas por nombre
-     */
     @Transactional(readOnly = true)
     public List<PlaylistSummaryResponse> searchPublicPlaylists(String query) {
         List<Playlist> playlists = playlistRepository.findPublicPlaylistsByNameContaining(query);
@@ -208,9 +184,6 @@ public class PlaylistService extends BaseService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Crear playlists por defecto para un usuario nuevo
-     */
     public void createDefaultPlaylistsForUser(User user) {
         // Playlist "Favoritas"
         Playlist favorites = Playlist.builder()
@@ -301,23 +274,37 @@ public class PlaylistService extends BaseService {
     }
 
     private SongWithChordsResponse mapToSongWithChordsResponse(Song song) {
-        // Aquí necesitarías implementar el mapeo completo
-        // Por ahora retorno una versión simplificada
-        return SongWithChordsResponse.builder()
+        try {
+            SongWithChordsRequest songData = null;
+            if (song.getChordsMap() != null && !song.getChordsMap().trim().isEmpty()) {
+                songData = objectMapper.readValue(
+                    song.getChordsMap(), 
+                    new TypeReference<SongWithChordsRequest>() {}
+                );
+            }
+            
+            return SongWithChordsResponse.builder()
                 .id(song.getId())
                 .title(song.getTitle())
                 .artist(song.getArtist())
                 .album(song.getAlbum())
                 .year(song.getYear())
+                .key(songData != null ? songData.getKey() : null)
+                .tempo(songData != null ? songData.getTempo() : null)
                 .status(song.getStatus())
                 .isPublic(song.getIsPublic())
+                .rejectionReason(song.getRejectionReason())
                 .createdAt(song.getCreatedAt())
                 .publishedAt(song.getPublishedAt())
+                .lyrics(songData != null ? songData.getLyrics() : null)
                 .createdBy(SongWithChordsResponse.CreatorInfo.builder()
                         .id(song.getCreatedBy().getId())
                         .username(song.getCreatedBy().getUsername())
                         .firstname(song.getCreatedBy().getFirstname())
                         .build())
                 .build();
+        } catch (JsonProcessingException e) {
+            throw new BusinessException("Error parsing song chords map: " + e.getMessage());
+        }
     }
 }
