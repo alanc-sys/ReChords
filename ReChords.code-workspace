@@ -1,17 +1,1 @@
-{
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../Rechord-Frontend"
-		},
-		{
-			"path": "../ReChords-Docker"
-		}
-	],
-	"settings": {
-		"java.compile.nullAnalysis.mode": "disabled",
-		"java.configuration.updateBuildConfiguration": "interactive"
-	}
-}
+
