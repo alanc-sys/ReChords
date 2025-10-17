@@ -4,199 +4,81 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2863bea-961c-417d-8b6b-2e8a9bf47747" name="Changes" comment="update">
+    <list default="true" id="f2863bea-961c-417d-8b6b-2e8a9bf47747" name="Changes" comment="monoRepo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API_DOCUMENTATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/API_DOCUMENTATION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ARCHITECTURE_DOCUMENTATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/ARCHITECTURE_DOCUMENTATION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReChords.code-workspace" beforeDir="false" afterPath="$PROJECT_DIR$/ReChords.code-workspace" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/CorsConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/DataSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/DataSeeder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/config/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/PlaylistController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/PlaylistController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/adminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/adminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/auth/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/auth/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/songController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/songController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/ChordRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/ChordRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/RegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/RegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/SongWithChordsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/request/SongWithChordsRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/response/SongWithChordsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/dto/response/SongWithChordsResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/entities/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/entities/Song.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/PlaylistRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/PlaylistRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/PlaylistSongRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/PlaylistSongRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/repositories/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/ChordService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/ChordService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/PlaylistService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/PlaylistService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongAnalyticsAsyncService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongAnalyticsAsyncService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongAnalyticsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongAnalyticsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongImportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongImportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/SongService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/auth/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/auth/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/auth/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/misacordes/application/services/auth/JwtService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/misacordes/application/controller/SongControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/misacordes/application/controller/SongControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/misacordes/application/controller/auth/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/misacordes/application/controller/auth/AuthControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/misacordes/application/dto/request/SongWithChordsRequestTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/misacordes/application/dto/request/SongWithChordsRequestTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/misacordes/application/entities/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/misacordes/application/entities/UserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/misacordes/application/services/auth/AuthServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/misacordes/application/services/auth/AuthServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/ApplicationConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/ApplicationConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/AsyncConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/AsyncConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/CorsConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/CorsConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/DataSeeder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/DataSeeder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$BusinessException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$BusinessException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ErrorResponse$ErrorResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ErrorResponse$ErrorResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ErrorResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ErrorResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ResourceNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler$ResourceNotFoundException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/GlobalExceptionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/JwtAuthenticationFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/JwtAuthenticationFilter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/config/security/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/ChordController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/PlaylistController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/PlaylistController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/adminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/adminController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/auth/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/auth/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/songController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/controller/songController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/AddSongToPlaylistRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/AddSongToPlaylistRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordPositionInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordPositionInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordRequest$ChordRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordRequest$ChordRequestBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/ChordRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/CreatePlaylistRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/CreatePlaylistRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LineWithChords.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LineWithChords.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest$LoginRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest$LoginRequestBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/LoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest$RegisterRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest$RegisterRequestBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RegisterRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RejectSongRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/RejectSongRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/SongWithChordsRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/SongWithChordsRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/UpdatePlaylistRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/request/UpdatePlaylistRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AdminStatsResponse$AdminStatsResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AdminStatsResponse$AdminStatsResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AdminStatsResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AdminStatsResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse$AuthResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse$AuthResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/AuthResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordInfo$ChordInfoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordInfo$ChordInfoBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordResponse$ChordResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordResponse$ChordResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/ChordResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PageResponse$PageResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PageResponse$PageResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PageResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PageResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$CreatorInfo$CreatorInfoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$CreatorInfo$CreatorInfoBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$CreatorInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$CreatorInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$PlaylistResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse$PlaylistResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$CreatorInfo$CreatorInfoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$CreatorInfo$CreatorInfoBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$CreatorInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$CreatorInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$PlaylistSummaryResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse$PlaylistSummaryResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/PlaylistSummaryResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$ChordUsage$ChordUsageBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$ChordUsage$ChordUsageBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$ChordUsage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$ChordUsage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$SongAnalyticsResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse$SongAnalyticsResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongAnalyticsResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$CreatorInfo$CreatorInfoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$CreatorInfo$CreatorInfoBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$CreatorInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$CreatorInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$SongWithChordsResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse$SongWithChordsResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/dto/response/SongWithChordsResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCatalog$ChordCatalogBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCatalog$ChordCatalogBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCatalog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCatalog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCategory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/ChordCategory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/DifficultyLevel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/DifficultyLevel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Playlist$PlaylistBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Playlist$PlaylistBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Playlist.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Playlist.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/PlaylistSong$PlaylistSongBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/PlaylistSong$PlaylistSongBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/PlaylistSong.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/PlaylistSong.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Role.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Song$SongBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Song$SongBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Song.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/Song.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User$UserBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User$UserBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/entities/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/ChordCatalogRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/ChordCatalogRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/PlaylistRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/PlaylistRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/PlaylistSongRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/PlaylistSongRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/SongRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/SongRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/repositories/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/BaseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/BaseService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/ChordService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/ChordService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/PlaylistService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/PlaylistService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsAsyncService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsAsyncService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongAnalyticsService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongImportService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongImportService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongService$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/SongService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/AuthService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/services/auth/JwtService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/utils/ChordTransposer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/utils/ChordTransposer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/misacordes/application/utils/SongStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/misacordes/application/utils/SongStatus.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.ApplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.config.ApplicationConfigTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.controller.auth.AuthControllerTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.ChordInfoTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.ChordPositionInfoTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.ChordPositionTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.LineWithChordsTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.LoginRequestTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.RegisterRequestTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.request.SongWithChordsRequestTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.response.AuthResponseTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.response.ChordInfoTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.dto.response.ChordPositionInfoTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.entities.SongChordTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.entities.UserTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.SongAnalyticsAsyncServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.SongAnalyticsServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.auth.AuthServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.auth.ChordServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.auth.JwtServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.auth.SongChordServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.misacordes.application.services.auth.SongServiceTest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.ApplicationTests.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.config.ApplicationConfigTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.controller.auth.AuthControllerTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.ChordInfoTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.ChordPositionInfoTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.ChordPositionTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.LineWithChordsTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.LoginRequestTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.RegisterRequestTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.request.SongWithChordsRequestTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.response.AuthResponseTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.response.ChordInfoTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.dto.response.ChordPositionInfoTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.entities.SongChordTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.entities.UserTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.SongAnalyticsAsyncServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.SongAnalyticsServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.auth.AuthServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.auth.ChordServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.auth.JwtServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.auth.SongChordServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.misacordes.application.services.auth.SongServiceTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/ApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/ApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/config/ApplicationConfigTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/config/ApplicationConfigTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/controller/SongControllerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/controller/SongControllerTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/controller/auth/AuthControllerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/controller/auth/AuthControllerTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/ChordPositionInfoTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/ChordPositionInfoTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/LineWithChordsTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/LineWithChordsTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/LoginRequestTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/LoginRequestTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/SongWithChordsRequestTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/request/SongWithChordsRequestTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/response/AuthResponseTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/response/AuthResponseTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/response/ChordPositionInfoTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/dto/response/ChordPositionInfoTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/entities/UserTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/entities/UserTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/repositories/SongRepositoryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/repositories/SongRepositoryTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/AuthServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/AuthServiceTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/ChordServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/ChordServiceTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/JwtServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/JwtServiceTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/SongServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/misacordes/application/services/auth/SongServiceTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/_metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/chunk-W4ZJZJPI.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/chunk-W4ZJZJPI.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react-dom_client.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/AUTO_LOGOUT.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/BOTON_TODOS_ACORDES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/CACHE_SESSION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/EXPLORACION_CANCIONES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/FLUJO_DOS_PASOS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/FUNCIONALIDADES_CANCIONES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/INSTRUCCIONES_PRUEBA.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/MODULO_PLAYLISTS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/documentation/SOLUCION_ACORDES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/postcss.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/adminApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/authApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/chordApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/playlistApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/api/songApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/components/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/components/ChordDiagram.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/components/MediaPlayers.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/components/ProposeChordModal.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/config/api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/main.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/AdminPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/CreateSongPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/EditSongPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/HomePage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/ImportSongPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/LoginPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/MyPlaylistsPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/PublicSongsPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/RegisterPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/TunerPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/ViewPlaylistPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/pages/ViewSongPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/store/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/store/authStore.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/types/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/types/auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/src/types/song.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/tailwind.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/tsconfig.node.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rechords/frontend/rechords-frontend/vite.config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/API_DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/ARCHITECTURE_DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/FUNCIONALIDAD_EDICION_IMPLEMENTADA.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/NUEVAS_FUNCIONALIDADES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/RESUMEN_IMPLEMENTACION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/SEGURIDAD_COMPLETA.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/example_song_with_chords.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/misacordes/application/controller/AdminController.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,6 +96,8 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="SYNC" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -248,6 +132,10 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Rechords" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.misacordes.application.controller" />
       <recent name="com.misacordes.application.services" />
@@ -381,8 +269,35 @@
       <option name="project" value="LOCAL" />
       <updated>1760296108394</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="monoRepo">
+      <option name="closed" value="true" />
+      <created>1760639464347</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1760639464347</updated>
+    </task>
+    <task id="LOCAL-00013" summary="monoRepo">
+      <option name="closed" value="true" />
+      <created>1760639562549</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1760639562549</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Refactorizacion" />
@@ -390,7 +305,10 @@
     <MESSAGE value="Nuevas implementaciones" />
     <MESSAGE value="eliminacion de metodo implemtando para actualizarlo con un metodo mas util" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="MonoRepo" />
+    <MESSAGE value="update&#10;Update ReChords.code-workspace" />
+    <MESSAGE value="monoRepo" />
+    <option name="LAST_COMMIT_MESSAGE" value="monoRepo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
